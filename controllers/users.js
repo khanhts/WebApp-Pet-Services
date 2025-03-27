@@ -13,6 +13,20 @@ module.exports = {
             path:'role',select:'name'
         });
     },
+    GetUserByEmail: async function (email) {
+        return await userModel.findOne({
+            email:email
+        }).populate({
+            path:'role',select:'name'
+        });
+    },
+    GetUserByToken: async function (token) {
+        return await userModel.findOne({
+            resetPasswordToken:token
+        }).populate({
+            path:'role',select:'name'
+        });
+    },
     GetUserByUsername: async function (username) {
         return await userModel.findOne({
             username: username

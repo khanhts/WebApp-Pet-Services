@@ -30,7 +30,7 @@ module.exports = {
             options.password.minSymbols,
         )),
         body("email").isEmail().withMessage(ERROR_EMAIL)],
-    validatorCreateUser:[
+    validatorLogin: [
         body("username").isAlphanumeric().withMessage(constants.ERROR_USERNAME),
         body("password").isStrongPassword(options.password).withMessage(utils.format(constants.ERROR_PASSWORD,
             options.password.minLength,
@@ -39,6 +39,17 @@ module.exports = {
             options.password.minNumbers,
             options.password.minSymbols,
         )),
-        body("email").isEmail().withMessage(ERROR_EMAIL),
-        body("role").isIn(constants.USER_PERMISSION).withMessage(ERROR_ROLE)]
+        body("email").isEmail().withMessage(ERROR_EMAIL)],
+    validatorForgotPassword: [
+        body("email").isEmail().withMessage(ERROR_EMAIL)
+    ], validatorChangePassword: [
+        body("password").isStrongPassword(options.password).withMessage(utils.format(constants.ERROR_PASSWORD,
+            options.password.minLength,
+            options.password.minLowercase,
+            options.password.minUppercase,
+            options.password.minNumbers,
+            options.password.minSymbols,
+        ))
+    ]
 }
+// lay code tren github va them validator cho CreateUser
