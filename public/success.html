@@ -4,33 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt Lịch Thành Công</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>✅ Đặt Lịch Thành Công!</h1>
-        <p><strong>🐶 Tên thú cưng:</strong> <span id="pet"></span></p>
-        <p><strong>👤 Tên chủ:</strong> <span id="ownerName"></span></p>
-        <p><strong>📞 Số điện thoại:</strong> <span id="phone"></span></p>
-        <p><strong>✉ Email:</strong> <span id="email"></span></p>
-        <p><strong>📆 Ngày hẹn:</strong> <span id="appointmentDate"></span></p>
-        <p><strong>✏ Ghi chú:</strong> <span id="reason"></span></p>
-
-        <a href="/" class="btn">🏠 Quay lại Trang Chủ</a>
-        <a href="/appointments" class="btn">📋 Xem Lịch Hẹn</a>
+        <h2>✅ Đặt Lịch Thành Công!</h2>
+        <p>Cảm ơn bạn đã đặt lịch hẹn.</p>
+        <a href="/index.html" class="btn">🔙 Quay Lại Lịch</a>
     </div>
-
-    <script>
-        // Lấy thông tin lịch hẹn từ localStorage và hiển thị
-        const appointment = JSON.parse(localStorage.getItem("appointment"));
-        if (appointment) {
-            document.getElementById('pet').innerText = appointment.pet;
-            document.getElementById('ownerName').innerText = appointment.ownerName;
-            document.getElementById('phone').innerText = appointment.phone;
-            document.getElementById('email').innerText = appointment.email;
-            document.getElementById('appointmentDate').innerText = new Date(appointment.appointmentDate).toLocaleDateString("vi-VN");
-            document.getElementById('reason').innerText = appointment.reason || "Không có ghi chú";
-        }
-    </script>
 </body>
 </html>

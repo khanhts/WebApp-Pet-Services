@@ -3,48 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đặt Lịch Khám</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Đặt Lịch Hẹn</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <nav class="navbar">
-        <ul>
-            <li><a href="/">Trang chủ</a></li>
-            <li><a href="/appointments">Danh sách lịch hẹn</a></li>
-        </ul>
-    </nav>
+    <div class="container">
+        <h2>📌 Đặt Lịch Hẹn</h2>
+        <form id="appointment-form">
+            <label for="appointmentDate">Chọn ngày:</label>
+            <input type="date" id="appointmentDate" name="appointmentDate" required>
+        
+            <label for="appointmentTime">Chọn khung giờ:</label>
+            <select id="appointmentTime" name="appointmentTime" required>
+                <option value="08:00">08:00 - 09:00</option>
+                <option value="09:00">09:00 - 10:00</option>
+                <option value="10:00">10:00 - 11:00</option>
+                <option value="14:00">14:00 - 15:00</option>
+                <option value="15:00">15:00 - 16:00</option>
+            </select>
+        
+            <label for="pet">Tên thú cưng:</label>
+            <input type="text" id="pet" name="pet" required>
+        
+            <label for="ownerName">Tên chủ:</label>
+            <input type="text" id="ownerName" name="ownerName" required>
+        
+            <label for="phone">Số điện thoại:</label>
+            <input type="text" id="phone" name="phone" required>
+        
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        
+            <label for="reason">Lý do khám:</label>
+            <textarea id="reason" name="reason"></textarea>
+        
+            <button type="submit">Đặt lịch</button>
+        </form>
+        
+    </div>
 
-    <h1>Đặt Lịch Khám Thú Cưng</h1>
-
-    <form action="/appointments/add" method="POST">
-        <label for="pet">Tên thú cưng:</label>
-        <input type="text" name="pet" required>
-
-        <label for="ownerName">Tên chủ:</label>
-        <input type="text" name="ownerName"s required>
-
-        <label for="phone">Số điện thoại:</label>
-        <input type="text" name="phone" required>
-
-        <label for="appointmentDate">Ngày:</label>
-        <input type="date" name="appointmentDate" id="appointmentDate" required>
-
-        <label for="notes">Ghi chú:</label>
-        <textarea name="notes"></textarea>
-
-        <label for="email">Email:</label>
-        <input type="email" name="email" required>
-
-        <button type="submit">Đặt Lịch</button>
-    </form>
-
-    <script>
-        // Lấy ngày từ URL và đặt vào ô input date
-        const urlParams = new URLSearchParams(window.location.search);
-        const date = urlParams.get('date');
-        if (date) {
-            document.getElementById('appointmentDate').value = date;
-        }
-    </script>
+    <script src="/js/script.js"></script>
 </body>
 </html>
