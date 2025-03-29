@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Lịch Khám</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/appointments">Danh sách lịch hẹn</a></li>
+        </ul>
+    </nav>
+
+    <h1>Đặt Lịch Khám Thú Cưng</h1>
+
+    <form action="/appointments/add" method="POST">
+        <label for="pet">Tên thú cưng:</label>
+        <input type="text" name="pet" required>
+
+        <label for="ownerName">Tên chủ:</label>
+        <input type="text" name="ownerName"s required>
+
+        <label for="phone">Số điện thoại:</label>
+        <input type="text" name="phone" required>
+
+        <label for="appointmentDate">Ngày:</label>
+        <input type="date" name="appointmentDate" id="appointmentDate" required>
+
+        <label for="notes">Ghi chú:</label>
+        <textarea name="notes"></textarea>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+
+        <button type="submit">Đặt Lịch</button>
+    </form>
+
+    <script>
+        // Lấy ngày từ URL và đặt vào ô input date
+        const urlParams = new URLSearchParams(window.location.search);
+        const date = urlParams.get('date');
+        if (date) {
+            document.getElementById('appointmentDate').value = date;
+        }
+    </script>
+</body>
+</html>
