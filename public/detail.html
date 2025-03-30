@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Lịch Hẹn</title>
+</head>
+<body>
+
+    <h1>Chi Tiết Lịch Hẹn</h1>
+    <div id="appointment-detail"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const id = window.location.pathname.split('/').pop();
+            fetch(`/appointments/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('appointment-detail').innerHTML = `
+                        <p><strong>Thú cưng:</strong> ${data.pet}</p>
+                        <p><strong>Chủ nuôi:</strong> ${data.ownerName}</p>
+                        <p><strong>Số điện thoại:</strong> ${data.phone}</p>
+                        <p><strong>Email:</strong> ${data.email}</p>
+                        <p><strong>Ngày hẹn:</strong> ${new Date(data.appointmentDate).toLocaleDateString()}</p>
+                        <p><strong>Lý do:</strong> ${data.reason || "Không có"}</p>
+                    `;
+                })
+                .catch(error => console.error("Lỗi:", error));
+        });
+    </script>
+
+</body>
+</html>
