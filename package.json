@@ -1,0 +1,12 @@
+{
+  "name": "webapp-pet-services",
+  "version": "1.0.0",
+  "description": "A web application where a user can make an appointment to visit a vet or buy pet's products",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
