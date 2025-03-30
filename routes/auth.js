@@ -29,7 +29,7 @@ router.post('/signup', validatorLogin, validate, async function (req, res, next)
     try {
         let body = req.body;
         let newUser = await userController.CreateAnUser(
-            body.username, body.password, body.email, 'user'
+            body.username, body.password, body.email, 'USER'
         )
         CreateSuccessRes(res, jwt.sign({
             id: newUser._id,

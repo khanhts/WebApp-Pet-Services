@@ -2,6 +2,7 @@ let { body, validationResult } = require('express-validator')
 let constants = require('./constants')
 let utils = require('util')
 const { ERROR_EMAIL, ERROR_ROLE } = require('./constants')
+let { CreateSuccessRes, CreateErrorRes } = require('../utils/responseHandler');
 let options = {
     password: {
         minLength: 8,
