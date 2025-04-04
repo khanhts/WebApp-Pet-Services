@@ -32,6 +32,11 @@ module.exports = {
             username: username
         }).populate('role');
     },
+    GetUserByEmail: async function (email) {
+        return await userModel.findOne({
+            email: email
+        }).populate('role');
+    },
     CreateAnUser: async function (username, password, email, rolename) {
         try {
             let role = await roleModel.findOne({
@@ -78,10 +83,10 @@ module.exports = {
             throw new Error(error.message)
         }
     },
-    CheckLogin: async function (username, password) {
-        let user = await this.GetUserByUsername(username);
+    CheckLogin: async function (email, password) {
+        let user = await this.GetUserByEmail(email);
         if (!user) {
-            throw new Error("Username hoc password khong dung")
+            throw new Error("Email hoac password khong dung")
         } else {
             if (bcrypt.compareSync(password, user.password)) {
                 return  user._id;

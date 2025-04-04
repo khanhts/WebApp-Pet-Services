@@ -13,9 +13,9 @@ let {sendmail} = require('../utils/sendmail')
 router.post('/login', async function (req, res, next) {
     try {
         let body = req.body;
-        let username = body.username;
+        let email = body.email;
         let password = body.password;
-        let userID = await userController.CheckLogin(username, password);
+        let userID = await userController.CheckLogin(email, password);
         CreateSuccessRes(res, jwt.sign({
             id: userID,
             expire: (new Date(Date.now() + 60 * 60 * 1000)).getTime()
@@ -27,9 +27,12 @@ router.post('/login', async function (req, res, next) {
 
 router.post('/signup', validatorLogin, validate, async function (req, res, next) {
     try {
+    res.setHeader("Access-Control-Allow-Origin", "*"); // Thử thêm trực tiếp
+    res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
         let body = req.body;
         let newUser = await userController.CreateAnUser(
-            body.username, body.password, body.email, 'USER'
+            body.username, body.password, body.email, 'user'
         )
         CreateSuccessRes(res, jwt.sign({
             id: newUser._id,

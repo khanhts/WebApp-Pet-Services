@@ -11,7 +11,7 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-mongoose.connect("mongodb://localhost:27017/S5");
+mongoose.connect("mongodb://localhost:27017/login");
 mongoose.connection.on('connected',()=>{
   console.log("connected");
 })
@@ -19,6 +19,12 @@ mongoose.connection.on('connected',()=>{
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+const cors = require('cors');
+
+app.use(cors({
+  origin: 'http://127.0.0.1:5500', // địa chỉ frontend
+  credentials: true
+}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -29,8 +35,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/roles', require('./routes/roles'));
 app.use('/auth', require('./routes/auth'));
-app.use('/products', require('./routes/products'));
-app.use('/categories', require('./routes/categories'));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -45,3 +49,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
