@@ -97,21 +97,21 @@ async function setupForm() {
         await loadAvailableTimes(preselectedDate, timeSelect);
     }
 
-    dateInput.addEventListener("change", async function () {
-        if (dateInput.value < today) {
-            alert("❌ Không thể đặt lịch vào ngày trong quá khứ!");
-            dateInput.value = today;
-            return;
-        }
+    // dateInput.addEventListener("change", async function () {
+    //     if (dateInput.value < today) {
+    //         alert("❌ Không thể đặt lịch vào ngày trong quá khứ!");
+    //         dateInput.value = today;
+    //         return;
+    //     }
 
-        if (disabledDates.includes(dateInput.value)) {
-            alert("❌ Ngày này là ngày lễ hoặc đã đầy lịch, vui lòng chọn ngày khác!");
-            dateInput.value = "";
-            return;
-        }
+    //     if (disabledDates.includes(dateInput.value)) {
+    //         alert("❌ Ngày này là ngày lễ hoặc đã đầy lịch, vui lòng chọn ngày khác!");
+    //         dateInput.value = "";
+    //         return;
+    //     }
 
-        await loadAvailableTimes(dateInput.value, timeSelect);
-    });
+    //     await loadAvailableTimes(dateInput.value, timeSelect);
+    // });
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -129,7 +129,7 @@ async function setupForm() {
 
             if (response.ok) {
                 alert("✅ Đặt lịch thành công!");
-                window.location.href = "/success.html";
+                // window.location.href = "/success.html";
             } else {
                 alert("❌ Đặt lịch thất bại!");
             }
@@ -138,7 +138,7 @@ async function setupForm() {
             alert("❌ Có lỗi xảy ra, vui lòng thử lại!");
         }
     });
-}
+}``
 
 /**
  * 🕒 Hàm kiểm tra khung giờ đã được đặt và hiển thị trạng thái "Đã đặt"
