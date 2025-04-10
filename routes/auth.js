@@ -14,26 +14,41 @@ let {
 } = require("../utils/validators");
 let crypto = require("crypto");
 let { sendmail } = require("../utils/sendmail");
+const { access } = require("fs");
+const { error } = require("console");
 
 router.post("/login", async function (req, res, next) {
   try {
     let body = req.body;
     let email = body.email;
     let password = body.password;
+
     let userID = await userController.CheckLogin(email, password);
-    let token = jwt.sign(
+
+    let accessToken = jwt.sign(
       {
         id: userID,
-        expire: new Date(Date.now() + 60 * 60 * 1000).getTime(),
       },
-      constants.SECRET_KEY
+      constants.SECRET_KEY,
+      { expiresIn: "15m" }
     );
-    res.cookie("token", token, {
+
+    let refreshToken = jwt.sign(
+      {
+        id: userID,
+      },
+      constants.REFRESH_SECRET_KEY,
+      { expiresIn: "7d" }
+    );
+
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      expires: new Date(Date.now() + 60 * 60 * 1000),
+      sameSite: "Strict",
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
-    CreateSuccessRes(res, { message: "Login successful" }, 200);
+
+    CreateSuccessRes(res, { accessToken }, 200);
   } catch (error) {
     CreateErrorRes(res, error.message, 401);
   }
@@ -91,8 +106,16 @@ router.post(
 );
 
 router.get("/me", check_authentication, async function (req, res, next) {
-  console.log(req.user);
-  CreateSuccessRes(res, req.user, 200);
+  try {
+    if (req.user) {
+      const user = await userController.getUserById(req.user.id); // Fetch user details
+      res.status(200).json({ user }); // Return user details
+    } else {
+      res.status(403).json({ message: "Unauthorized" });
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post(
@@ -152,5 +175,37 @@ router.post(
     }
   }
 );
+
+router.post("/logout", async function (req, res, next) {
+  try {
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+    });
+
+    CreateSuccessRes(res, { message: "Logged out successfully" }, 200);
+  } catch (error) {
+    CreateErrorRes(res, error.message, 500);
+  }
+});
+
+router.get("/refresh", async function (req, res, next) {
+  try {
+    const refreshToken = req.cookies.refreshToken; // Assuming refresh token is stored in cookies
+    if (!refreshToken) {
+      return res.status(403).json({ message: "Refresh token missing" });
+    }
+
+    const decoded = jwt.verify(refreshToken, constants.REFRESH_SECRET_KEY);
+    const newAccessToken = jwt.sign({ id: decoded.id }, constants.SECRET_KEY, {
+      expiresIn: "15m",
+    });
+
+    res.status(200).json({ accessToken: newAccessToken });
+  } catch (error) {
+    res.status(403).json({ message: "Invalid or expired refresh token" });
+  }
+});
 
 module.exports = router;

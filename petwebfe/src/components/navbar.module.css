@@ -1,8 +1,10 @@
-nav {
+.navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
+    margin-bottom: 20px;
+    align-items: center;
 }
 
 .navbar_logo {
@@ -11,24 +13,25 @@ nav {
     text-decoration: none;
 }
 
-nav ul {
+.navbar ul {
     list-style: none;
     display: flex;
     justify-content: space-between;
+    margin: 0;
 }
 
-nav ul li {
+.navbar ul li {
     margin: 0 20px;
 }
 
-nav ul li a {
+.navbar ul li a {
     color: white;
     text-decoration: none;
     font-size: 1.25rem;
     transition: color 0.3s ease;
 }
 
-nav ul li a:hover {
+.navbar ul li a:hover {
     color: #fdd835;
 }
 
@@ -43,4 +46,30 @@ nav ul li a:hover {
 
 .login_button:hover {
     background-color: #c6a700;
+}
+
+.logout_button {
+    background-color: #f44336;
+    /* Red background */
+    color: white;
+    /* White text */
+    border: none;
+    /* Remove border */
+    padding: 10px 20px;
+    /* Add padding */
+    font-size: 1.25rem;
+    /* Font size */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    border-radius: 5px;
+    /* Rounded corners */
+    transition: background-color 0.3s ease;
+    /* Smooth hover effect */
+}
+
+.logout_button:hover {
+    background-color: #d32f2f;
+    /* Darker red on hover */
+    opacity: 0.9;
+    /* Slight transparency on hover */
 }

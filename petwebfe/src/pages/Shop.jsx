@@ -1,5 +1,5 @@
-import TableProduct from "../components/TableProduct";
+import ProductCard from "../components/ProductCard";
 
 export default function Shop() {
-  return <TableProduct />;
+  return <ProductCard />;
 }

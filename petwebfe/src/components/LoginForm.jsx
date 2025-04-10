@@ -1,9 +1,12 @@
 import styles from "./LoginForm.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { login } from "../axios/AxiosAuth";
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   const [errorMessage, setErrorMessage] = useState(""); // Store a single error message
   const [isLoading, setIsLoading] = useState(false);
@@ -41,27 +44,13 @@ export default function LoginForm() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log("Login successful:", data);
-        alert("Login successful!");
-        navigate("/");
-      } else {
-        console.error("Login failed:", data);
-        setErrorMessage(data.message || "Đăng nhập thất bại.");
-      }
+      const data = await login(email, password);
+      setToken(data.data.accessToken);
+      alert("Login successful!");
+      navigate("/");
     } catch (error) {
-      setErrorMessage("Đã xảy ra lỗi. Vui lòng thử lại sau.");
-      console.error("Error during login:", error);
+      setErrorMessage(error.response?.data?.message || "Đăng nhập thất bại.");
+      console.error("Login failed:", error);
     } finally {
       setIsLoading(false);
     }

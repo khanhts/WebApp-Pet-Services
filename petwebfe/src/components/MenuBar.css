@@ -1,0 +1,65 @@
+/* General menu bar styles */
+.menu-bar {
+    background-color: #333;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.menu-item {
+    position: relative;
+}
+
+.menu-item a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+    transition: background-color 0.3s ease;
+    font-size: 1.25rem;
+}
+
+.menu-item a:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+/* Submenu styles */
+.submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #444;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1000;
+}
+
+.menu-item:hover .submenu {
+    display: block;
+}
+
+.submenu .menu {
+    flex-direction: column;
+    gap: 0;
+}
+
+.submenu .menu-item a {
+    padding: 10px 20px;
+    color: white;
+    font-size: 1.25rem;
+}
+
+.submenu .menu-item a:hover {
+    background-color: #666;
+}

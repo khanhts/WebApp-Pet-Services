@@ -1,32 +1,33 @@
 import { Link, useNavigate } from "react-router-dom";
 import style from "./navbar.module.css";
-import LoginForm from "./LoginForm";
+import { useAuth } from "../context/AuthContext"; // Import useAuth hook
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const { token, setToken } = useAuth(); // Access token and setToken from AuthProvider
 
   const handleLogin = () => {
     navigate("/auth/login");
   };
 
+  const handleLogout = () => {
+    setToken(null); // Clear the token on logout
+    navigate("/"); // Redirect to the homepage after logout
+  };
+
   return (
-    <nav className="navbar">
+    <nav className={style.navbar}>
       <div className="navbar__logo">PetWeb</div>
-      <ul className="navbar__links">
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/shop">Shop</Link>
-        </li>
-        <li>
-          <a href="/calendar">Calendar</a>
-        </li>
-      </ul>
       <div className="navbar__buttons">
-        <button className={style.login_button} onClick={() => handleLogin()}>
-          Login
-        </button>
+        {token ? (
+          <button className={style.logout_button} onClick={handleLogout}>
+            Logout
+          </button>
+        ) : (
+          <button className={style.login_button} onClick={handleLogin}>
+            Login
+          </button>
+        )}
       </div>
     </nav>
   );

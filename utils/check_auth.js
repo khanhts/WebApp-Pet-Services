@@ -1,41 +1,71 @@
-let jwt = require('jsonwebtoken')
-let constants = require('../utils/constants')
-let userController = require('../controllers/users');
-const e = require('express');
+const jwt = require("jsonwebtoken");
+const constants = require("../utils/constants");
+const userController = require("../controllers/users");
+
 module.exports = {
-    check_authentication: async function (req, res, next) {
-        if (req.headers && req.headers.authorization) {
-            let authorization = req.headers.authorization;
-            if (authorization.startsWith("Bearer")) {
-                let token = authorization.split(" ")[1]
-                let result = jwt.verify(token, constants.SECRET_KEY);
-                if (result.expire > Date.now()) {
-                    let user = await userController.GetUserByID(result.id);
-                    req.user = user;
-                    next();
-                } else {
-                    throw new Error("ban chua dang nhap")
-                }
-            } else {
-                throw new Error("ban chua dang nhap")
-            }
+  check_authentication: async function (req, res, next) {
+    try {
+      // Check if the Authorization header exists
+      if (req.headers && req.headers.authorization) {
+        const authorization = req.headers.authorization;
+
+        // Check if the token starts with "Bearer "
+        if (authorization.startsWith("Bearer ")) {
+          const token = authorization.split(" ")[1]; // Extract the token
+
+          // Verify the token
+          const decoded = jwt.verify(token, constants.SECRET_KEY);
+
+          // Check if the token is expired
+          if (decoded.exp * 1000 > Date.now()) {
+            req.accessToken = token; // Attach the token to the request
+            req.user = decoded; // Attach the decoded user data to the request
+            next(); // Proceed to the next middleware or route
+          } else {
+            // Token expired
+            const error = new Error("Token expired");
+            error.statusCode = 403;
+            throw error;
+          }
         } else {
-            throw new Error("ban chua dang nhap")
+          // Invalid token format
+          const error = new Error("Invalid token format");
+          error.statusCode = 403;
+          throw error;
         }
-    },
-    check_authorization: function (roles) {
-        return async function (req, res, next) {
-            try {
-                console.log(object);
-                let roleOfUser = req.user.role.name;
-                if (roles.includes(roleOfUser)) {
-                    next();
-                } else {
-                    throw new Error("ban khong co quyen")
-                }
-            } catch (error) {
-                next(error)
-            }
-        }
+      } else {
+        // No Authorization header
+        const error = new Error("Authorization header missing");
+        error.statusCode = 403;
+        throw error;
+      }
+    } catch (error) {
+      // Handle JWT-specific errors
+      if (error.name === "JsonWebTokenError") {
+        error.message = "Invalid token";
+        error.statusCode = 403;
+      } else if (error.name === "TokenExpiredError") {
+        error.message = "Token expired";
+        error.statusCode = 403;
+      }
+      next(error); // Pass the error to the global error handler
     }
-}
+  },
+
+  check_authorization: function (roles) {
+    return async function (req, res, next) {
+      try {
+        const roleOfUser = req.user.role; // Assuming `req.user` contains the role
+        if (roles.includes(roleOfUser)) {
+          next(); // User is authorized
+        } else {
+          const error = new Error("You do not have the required permissions");
+          error.statusCode = 403;
+          throw error;
+        }
+      } catch (error) {
+        next(error); // Pass the error to the global error handler
+      }
+    };
+  },
+};
