@@ -1,5 +1,9 @@
 var express = require('express');
 var router = express.Router();
+let appointmentModel = require('../schemas/appointments');
+let userModel = require('../schemas/users');
+
+let { CreateSuccessRes, CreateErrorRes } = require('../utils/responseHandler');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -7,9 +11,14 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/create', async function(req, res, next) {
+  if (req.session.authenticated) {
     res.render('appointments/add', {
-        calendarDays: []  // Can still generate or leave empty for the calendar
-      });
+      calendarDays: []  
+    });
+  } else {
+      // User is not authenticated, redirect to login page
+      res.redirect('/auth/login');
+  }
   });
 
 module.exports = router;

@@ -1,0 +1,77 @@
+.register-form {
+    max-width: 500px;
+    margin: 80px auto;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #1e1e1e;
+}
+
+.register-form h2 {
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 2.2rem;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #fdd835;
+    outline: none;
+    box-shadow: 0 0 4px #fdd83555;
+}
+
+button[type="submit"] {
+    width: 100%;
+    background-color: #fdd835;
+    color: #1e1e1e;
+    border: none;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #c6a700;
+}
+
+.goto_login {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.goto_login:hover {
+    color: #004a99;
+}
+
+p {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.95rem;
+}

@@ -1,0 +1,160 @@
+/* Products Page Styles */
+.page-title{
+    display: flex;                  /* Flexbox for alignment */
+    justify-content: center;        /* Center the title horizontally */
+    align-items: center;
+    height: 100px;                  /* Height of the title section */
+    margin-bottom: 30px;               /* Space below the heading */
+    background-color: #ffffff;         /* White background for a clean look */
+    border-radius: 5px;                /* Slight rounding for the background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for subtle emphasis */
+}
+
+.products h2 {
+    font-size: 32px;                   /* Adjusted to make the heading fit within the layout */
+    color: #333;                       /* Dark color for text to contrast with background */
+    text-align: center;                /* Center the heading */
+    font-family: 'Arial', sans-serif;  /* Clean and modern font */
+    font-weight: 600;                  /* Slightly less bold to keep it subtle */
+    text-transform: capitalize;        /* Capitalize each word */
+    letter-spacing: 1px;               /* Slight letter spacing */
+    padding: 10px 20px;                /* Padding for spacing around the text */
+    color: #009688;                    /* Use the same brand color for text */
+}
+
+
+
+
+/* Search Bar Section */
+.search-bar-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;        /* Center the search bar */
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.search-bar-container button {
+    padding: 10px 20px;
+    background-color: #009688;
+    color: white;
+    font-size: 16px;
+    border: 1px solid #009688;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+    transition: background-color 0.3s ease;
+}
+
+.search-input-container {
+    width: 26%;
+    position: relative;
+}
+
+#search-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+#search-input:focus {
+    border-color: #009688;
+    outline: none;
+}
+
+@media (max-width: 768px) {
+    #search-input {
+        width: 80%;
+    }
+}
+
+#search-dropdown {
+    position: absolute;
+    top: 100%;            /* Position the dropdown directly below the search input */
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: none;        /* Hidden by default */
+    max-height: 200px;
+    overflow-y: auto;     /* Scroll if there are too many items */
+    z-index: 10;          /* Make sure it's on top of other elements */
+}
+
+#dropdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#dropdown-list li {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#dropdown-list li:hover {
+    background-color: #f0f0f0;
+}
+
+#dropdown-list li:active {
+    background-color: #f1f1f1;
+}
+
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.product-card {
+    width: 30%;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.product-card img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.product-card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.product-card p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.product-card button {
+    background-color: #009688;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.product-card button:hover {
+    background-color: #00796b;
+}

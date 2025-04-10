@@ -13,9 +13,11 @@ html
     // Display the calendar grid
     .calendar-container
       .calendar-header
-        button(id="prevMonth") Previous
+        .button-container
+            button(id="prevMonth") Previous
         h2(id="calendarHeaderMonthYear")
-        button(id="nextMonth") Next
+        .button-container
+            button(id="nextMonth") Next
 
       .calendar-weekdays
         .calendar-day-header Monday
@@ -27,13 +29,6 @@ html
         .calendar-day-header Sunday
 
       .calendar-grid
-        //- each row, index in calendarDays
-        //-   .calendar-row
-        //-     each day in row
-        //-       if day
-        //-         .calendar-day(data-day=day) #{day}
-        //-       else
-        //-         .calendar-day.empty
 
     div(id="appointmentFormContainer", style='display: none;')  
       form(id="appointmentForm" ,action='/appointments/create', method='POST')
@@ -57,19 +52,43 @@ html
         var currentMonth = new Date().getMonth();  // Start with the current month
         var currentYear = new Date().getFullYear();  // Start with the current year
         var currentDate = new Date();  // Get the current date
+        var maxFutureMonth = new Date(currentYear, currentMonth + 12, 1);  // Maximum future month (current month + 5 months)
+        var minPastMonth = new Date(currentYear, currentMonth, 1);  // Minimum past month (current month)
         // Update the calendar header when rendering
         function updateCalendarHeader() {
             const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             $('#calendarHeaderMonthYear').text(months[currentMonth] + ' ' + currentYear);  // Update the month and year in the header
         }
+        function isMonthInRange(month, year) {
+            var targetDate = new Date(year, month, 1);
+            return targetDate >= minPastMonth && targetDate <= maxFutureMonth;
+        }
+        function updateNavigationButtons() {
+            // If we're at the minimum month (current month), hide the "Previous" button
+            if (currentMonth === minPastMonth.getMonth() && currentYear === minPastMonth.getFullYear()) {
+                $("#prevMonth").hide();
+            } else {
+                $("#prevMonth").show();
+            }
+
+            // If we're at the maximum future month, hide the "Next" button
+            if (currentMonth === maxFutureMonth.getMonth() && currentYear === maxFutureMonth.getFullYear()) {
+                $("#nextMonth").hide();
+            } else {
+                $("#nextMonth").show();
+            }
+        }
         // Calendar navigation (Next/Previous Month)
         $("#prevMonth").click(function() {
-          changeMonth(-1);
+            if (isMonthInRange(currentMonth - 1, currentYear)) {
+                changeMonth(-1);  // Go to the previous month
+            }
         });
         $("#nextMonth").click(function() {
-          changeMonth(1);
+            if (isMonthInRange(currentMonth + 1, currentYear)) {
+                changeMonth(1);  // Go to the next month
+            }
         });
-
         // Weekday names starting from Monday
         var weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -131,6 +150,8 @@ html
             });
 
             updateCalendarHeader();
+
+            updateNavigationButtons();
         }
 
         generateCalendar();
@@ -167,7 +188,7 @@ html
             return date < today;
         }
 
-        fetch('/api/users/vets')
+        fetch('/users/vets')
           .then(response => response.json()).then(data => {
             const vets = data.data;
             console.log(vets);

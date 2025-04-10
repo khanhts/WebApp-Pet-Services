@@ -10,5 +10,11 @@ module.exports={
             success:true,
             data:data
         })
+    },
+    CreateFailRes:function(res,message,statusCode){
+        return res.status(statusCode).send({
+            success:false,
+            message:message
+        })
     }
 }

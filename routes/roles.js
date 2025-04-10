@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var roleController = require('../../controllers/roles')
-let {CreateErrorRes,CreateSuccessRes} = require('../../utils/responseHandler')
+var roleController = require('../controllers/roles')
+let {CreateErrorRes,CreateSuccessRes} = require('../utils/responseHandler')
 
 /* GET users listing. */
 router.get('/', async function(req, res, next) {
