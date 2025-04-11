@@ -18,6 +18,7 @@ var menuRouter = require("./routes/menu");
 var reviewRouter = require("./routes/review");
 var invoiceRouter = require("./routes/invoices");
 var tagsRouter = require("./routes/tags");
+var servicesRouter = require("./routes/services");
 
 var app = express();
 
@@ -53,6 +54,7 @@ app.use("/menu", menuRouter);
 app.use("/review", reviewRouter);
 app.use("/invoices", invoiceRouter);
 app.use("/tags", tagsRouter);
+app.use("/services", servicesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

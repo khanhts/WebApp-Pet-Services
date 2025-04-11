@@ -18,6 +18,8 @@ import TagManagePage from "./pages/TagManagePage";
 import Appointment from "./pages/Appointment";
 import MyInvoicesPage from "./pages/MyInvoicesPage";
 import InvoicePage from "./pages/InvoicePage";
+import ServicePage from "./pages/ServicePage";
+import ServicesManagePage from "./pages/ServicesManagePage";
 function App() {
   return (
     <BrowserRouter>
@@ -34,6 +36,7 @@ function App() {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/invoices" element={<MyInvoicesPage />} />
         <Route path="/invoice/:id" element={<InvoicePage />} />
+        <Route path="/services" element={<ServicePage />} />
         <Route
           path="/admin"
           element={
@@ -79,6 +82,14 @@ function App() {
             element={
               <ProtectedRoute role="admin">
                 <TagManagePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="service-manage"
+            element={
+              <ProtectedRoute role="admin">
+                <ServicesManagePage />
               </ProtectedRoute>
             }
           />

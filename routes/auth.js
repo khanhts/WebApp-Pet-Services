@@ -28,7 +28,7 @@ router.post("/login", async function (req, res, next) {
     let accessToken = jwt.sign(
       {
         id: userID,
-        expire: new Date(Date.now() + 1000 * 60 * 1000).getTime(), // 15 minutes from now
+        expire: new Date(Date.now() + 15 * 60 * 1000).getTime(), // 15 minutes from now
       },
       constants.SECRET_KEY,
       { expiresIn: "15m" }
