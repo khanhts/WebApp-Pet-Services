@@ -6,7 +6,6 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { token, logout } = useAuth();
   const role = localStorage.getItem("role");
-  console.log("Role from localStorage:", role);
   const handleLogin = () => {
     navigate("/auth/login");
   };

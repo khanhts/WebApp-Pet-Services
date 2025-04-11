@@ -120,37 +120,32 @@ router.get("/me", check_authentication, async function (req, res, next) {
   }
 });
 
-router.post(
-  "/forgotpassword",
-  validatorForgotPassword,
-  validate,
-  async function (req, res, next) {
-    try {
-      let email = req.body.email;
-      let user = await userController.GetUserByEmail(email);
-      if (user) {
-        user.resetPasswordToken = crypto.randomBytes(24).toString("hex");
-        user.resetPasswordTokenExp = new Date(
-          Date.now() + 10 * 60 * 1000
-        ).getTime();
-        await user.save();
-        let url = `http://localhost:3000/auth/reset_password/${user.resetPasswordToken}`;
-        await sendmail(user.email, "Reset password", url);
-        CreateSuccessRes(
-          res,
-          {
-            url: url,
-          },
-          200
-        );
-      } else {
-        throw new Error("email khong ton tai");
-      }
-    } catch (error) {
-      next(error);
+router.post("/forgotpassword", validate, async function (req, res, next) {
+  try {
+    let email = req.body.email;
+    let user = await userController.GetUserByEmail(email);
+    if (user) {
+      user.resetPasswordToken = crypto.randomBytes(24).toString("hex");
+      user.resetPasswordTokenExp = new Date(
+        Date.now() + 10 * 60 * 1000
+      ).getTime();
+      await user.save();
+      let url = `http://localhost:5173/auth/reset_password/${user.resetPasswordToken}`;
+      await sendmail(user.email, "Reset password", url);
+      CreateSuccessRes(
+        res,
+        {
+          url: url,
+        },
+        200
+      );
+    } else {
+      throw new Error("email khong ton tai");
     }
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 router.post(
   "/reset_password/:token",

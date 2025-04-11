@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const Invoice = require("../schemas/invoice");
 const InvoiceItem = require("../schemas/invoiceItem");
 
@@ -27,6 +26,14 @@ module.exports = {
     }
   },
 
+  GetAllInvoices: async function () {
+    try {
+      return await Invoice.find().populate("customerId"); // Populate customer details if needed
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+
   GetMyInvoices: async function (customerId) {
     try {
       return await Invoice.find({ customerId }).populate("customerId");
@@ -46,6 +53,39 @@ module.exports = {
       return { invoice, items: invoiceItems };
     } catch (error) {
       throw new Error("Error fetching invoice details: " + error.message);
+    }
+  },
+
+  UpdateInvoiceStatus: async function (invoiceId, status) {
+    try {
+      // Find the invoice by ID and update its status
+      const invoice = await Invoice.findById(invoiceId);
+      if (!invoice) {
+        throw new Error("Invoice not found");
+      }
+
+      invoice.status = status; // Update the status field
+      return await invoice.save(); // Save the updated invoice
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+  CancelInvoice: async function (invoiceId, userId) {
+    try {
+      const invoice = await Invoice.findById(invoiceId);
+
+      if (!invoice) {
+        throw new Error("Invoice not found");
+      }
+
+      if (invoice.customerId._id.toString() !== userId.toString()) {
+        throw new Error("You are not authorized to cancel this invoice");
+      }
+
+      invoice.status = "Cancelled";
+      return await invoice.save();
+    } catch (error) {
+      throw new Error(error.message);
     }
   },
 };

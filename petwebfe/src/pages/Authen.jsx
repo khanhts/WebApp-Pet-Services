@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import LoginForm from "../components/LoginForm.jsx";
 import RegisterForm from "../components/RegisterForm.jsx";
+import ForgotPassword from "./ForgorPasswordPage.jsx";
+import ResetPasswordPage from "./ResetPasswordPage.jsx";
 
 export default function Checkout() {
   const params = useParams();
@@ -10,6 +12,8 @@ export default function Checkout() {
       <div className="auth-forms">
         {action === "login" && <LoginForm />}
         {action === "register" && <RegisterForm />}
+        {action == "forgot-password" && <ForgotPassword />}
+        {action === "reset-password" && <ResetPasswordPage />}
       </div>
     </div>
   );

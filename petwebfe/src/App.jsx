@@ -4,7 +4,6 @@ import Homepage from "./pages/Homepage";
 import Shop from "./pages/Shop";
 import PageNotFound from "./pages/PageNotFound";
 import Header from "./components/Header";
-import Authen from "./pages/Authen";
 import CartPage from "./pages/CartPage";
 import MenuBar from "./components/MenuBar";
 import CheckoutPage from "./pages/CheckoutPage";
@@ -20,6 +19,13 @@ import MyInvoicesPage from "./pages/MyInvoicesPage";
 import InvoicePage from "./pages/InvoicePage";
 import ServicePage from "./pages/ServicePage";
 import ServicesManagePage from "./pages/ServicesManagePage";
+import ForgotPassword from "./pages/ForgorPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import LoginForm from "./components/LoginForm";
+import Redirect from "./components/Redirect";
+import RegisterForm from "./components/RegisterForm";
+import UserManagePage from "./pages/UserManagePage";
+import InvoiceManagePage from "./pages/InvoiceManagePage";
 function App() {
   return (
     <BrowserRouter>
@@ -29,8 +35,7 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/home" element={<Homepage />} />
         <Route path="/shop" element={<Shop />} />
-        <Route path="/auth/:action" element={<Authen />} />
-        <Route path="/auth" element={<Authen />} />
+        <Route path="/auth" element={<Redirect new_path={"/auth/login"} />} />
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
@@ -93,7 +98,30 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="users-manage"
+            element={
+              <ProtectedRoute role="admin">
+                <UserManagePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="invoice-manage"
+            element={
+              <ProtectedRoute role="admin">
+                <InvoiceManagePage />
+              </ProtectedRoute>
+            }
+          />
         </Route>
+        <Route path="/auth/login" element={<LoginForm />} />
+        <Route path="/auth/register" element={<RegisterForm />} />
+        <Route path="/auth/forgotpassword" element={<ForgotPassword />} />
+        <Route
+          path="/auth/reset_password/:token"
+          element={<ResetPasswordPage />}
+        />
         <Route path="/access-denied" element={<AccessDenied />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

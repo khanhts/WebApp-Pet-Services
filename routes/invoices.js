@@ -1,7 +1,25 @@
 const express = require("express");
 const router = express.Router();
 const invoiceController = require("../controllers/invoices");
-let { check_authentication } = require("../utils/check_auth");
+let constants = require("../utils/constants");
+let {
+  check_authentication,
+  check_authorization,
+} = require("../utils/check_auth");
+
+router.get(
+  "/",
+  check_authentication,
+  check_authorization(constants.ADMIN_PERMISSION),
+  async (req, res) => {
+    try {
+      const invoices = await invoiceController.GetAllInvoices();
+      res.status(200).json({ success: true, data: invoices });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);
 
 router.get("/my", check_authentication, async (req, res) => {
   try {
@@ -30,6 +48,42 @@ router.post("/", check_authentication, async (req, res) => {
     console.log(invoiceData);
     const newInvoice = await invoiceController.CreateInvoice(invoiceData);
     res.status(201).json({ success: true, data: newInvoice });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+});
+
+router.put(
+  "/:id/status",
+  check_authentication,
+  check_authorization(constants.ADMIN_PERMISSION),
+  async (req, res) => {
+    try {
+      const invoiceId = req.params.id;
+      const { status } = req.body;
+      const updatedInvoice = await invoiceController.UpdateInvoiceStatus(
+        invoiceId,
+        status
+      );
+
+      res.status(200).json({ success: true, data: updatedInvoice });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+);
+
+router.put("/cancel/:id", check_authentication, async (req, res) => {
+  try {
+    const invoiceId = req.params.id;
+    const userId = req.user._id;
+
+    const canceledInvoice = await invoiceController.CancelInvoice(
+      invoiceId,
+      userId
+    );
+
+    res.status(200).json({ success: true, data: canceledInvoice });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

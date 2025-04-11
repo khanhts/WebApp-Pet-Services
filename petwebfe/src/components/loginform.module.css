@@ -64,7 +64,8 @@ button[type="submit"]:hover {
     background-color: #c6a700;
 }
 
-.goto_register {
+.goto_register,
+.goto_forgot {
     text-align: center;
     margin-top: 20px;
     color: #fdd835;

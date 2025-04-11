@@ -52,7 +52,7 @@ export default function MyInvoicesPage() {
           {invoices.map((invoice) => (
             <tr key={invoice._id}>
               <td>{invoice._id}</td>
-              <td>${invoice.totalAmount.toFixed(2)}</td>
+              <td>{invoice.totalAmount.toLocaleString()} VND</td>
               <td>{invoice.status}</td>
               <td>
                 <Link to={`/invoice/${invoice._id}`}>View Details</Link>

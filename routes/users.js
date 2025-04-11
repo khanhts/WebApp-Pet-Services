@@ -31,37 +31,48 @@ router.get("/vets", async function (req, res, next) {
     next(error);
   }
 });
-router.post("/", check_authentication, async function (req, res, next) {
-  try {
-    let body = req.body;
-    let user = await userController.CreateAnUser(
-      body.username,
-      body.password,
-      body.email,
-      body.role
-    );
-    CreateSuccessRes(res, user, 200);
-  } catch (error) {
-    next(error);
+router.post(
+  "/",
+  check_authentication,
+  check_authorization(constants.ADMIN_PERMISSION),
+  async function (req, res, next) {
+    try {
+      let body = req.body;
+      let user = await userController.CreateAnUser(
+        body.username,
+        body.password,
+        body.email,
+        body.role
+      );
+      CreateSuccessRes(res, user, 200);
+    } catch (error) {
+      next(error);
+    }
   }
-});
-router.put("/:id", async function (req, res, next) {
-  try {
-    let body = req.body;
-    let user = await userController.UpdateAnUser(req.params.id, body);
-    CreateSuccessRes(res, user, 200);
-  } catch (error) {
-    next(error);
+);
+router.put(
+  "/:id",
+  check_authentication,
+  check_authorization(constants.ADMIN_PERMISSION),
+  async function (req, res, next) {
+    try {
+      let body = req.body;
+      console.log("body", body);
+      let user = await userController.UpdateAnUser(req.params.id, body);
+      CreateSuccessRes(res, user, 200);
+    } catch (error) {
+      next(error);
+    }
   }
-});
-router.delete("/:id", async function (req, res, next) {
-  try {
-    let body = req.body;
-    let user = await userController.DeleteAnUser(req.params.id);
-    CreateSuccessRes(res, user, 200);
-  } catch (error) {
-    next(error);
-  }
-});
+);
+// router.delete("/:id", async function (req, res, next) {
+//   try {
+//     let body = req.body;
+//     let user = await userController.DeleteAnUser(req.params.id);
+//     CreateSuccessRes(res, user, 200);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 module.exports = router;

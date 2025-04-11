@@ -30,7 +30,7 @@ export default function LoginForm() {
     }
 
     if (!password) {
-      setErrorMessage("Mật khẩu phải có ít nhất 6 ký tự!");
+      setErrorMessage("Mật khẩu phải có ít nhất 8 ký tự!");
       return;
     }
 
@@ -43,7 +43,6 @@ export default function LoginForm() {
 
     try {
       const data = await signin(email, password);
-      console.log("Login data:", data);
       login(data.data.accessToken);
       alert("Login successful!");
       navigate("/");
@@ -73,6 +72,11 @@ export default function LoginForm() {
           {isLoading ? "Logging in..." : "Login"}
         </button>
       </form>
+      <p>
+        <Link className={styles.goto_forgot} to="/auth/forgotpassword">
+          Forgot password?
+        </Link>
+      </p>
       <p>
         Don't have an account?{" "}
         <Link className={styles.goto_register} to="/auth/register">

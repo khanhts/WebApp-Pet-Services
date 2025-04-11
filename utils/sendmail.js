@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   host: "sandbox.smtp.mailtrap.io",
-  port: 25,
+  port: 465,
   secure: false,
   auth: {
     user: "4b30252124ebd0",
@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 module.exports = {
   sendmail: async function (to, subject, URL) {
     return await transporter.sendMail({
-      from: "NNPTDU@heheheh.com",
+      from: "PetWeb@noreply.com",
       to: to,
       subject: subject,
       html: `<p>Nhấn vào <a href=${URL}>đây</a> để đặt lại mật khẩu</p>`,

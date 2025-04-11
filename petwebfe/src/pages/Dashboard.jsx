@@ -8,8 +8,8 @@ export default function Dashboard() {
       <h1>Admin Dashboard</h1>
       <nav className="dashboard-nav">
         <Link to="/admin/management/product-manage">Product Management</Link>
-        <Link to="/admin/management/order-manage">Order Management</Link>
-        <Link to="/admin/management/user-manage">User Management</Link>
+        <Link to="/admin/management/invoice-manage">Invoice Management</Link>
+        <Link to="/admin/management/users-manage">User Management</Link>
       </nav>
       <div className="dashboard-content">
         <p>

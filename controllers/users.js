@@ -4,8 +4,9 @@ let bcrypt = require("bcrypt");
 
 module.exports = {
   GetAllUsers: async function () {
+    const adminRole = await roleModel.findOne({ name: "admin" });
     return await userModel.find({
-      status: false,
+      role: { $ne: adminRole._id },
     });
   },
   GetAllUsersByRole: async function (id) {
@@ -42,6 +43,7 @@ module.exports = {
   },
   GetUserByEmail: async function (email) {
     return await userModel.findOne({
+      status: false,
       email: email,
     });
   },
@@ -84,9 +86,11 @@ module.exports = {
         "fullName",
         "phone",
         "address",
+        "status",
       ];
       for (const key of Object.keys(body)) {
         if (allowField.includes(key)) {
+          if (key === "status") body[key] = body[key] === "true" ? true : false;
           user[key] = body[key];
         }
       }

@@ -32,7 +32,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("role", userData.role.name);
       localStorage.setItem("userId", userData._id);
     } catch (error) {
-      console.error("Failed to fetch user details:", error);
       logout();
     } finally {
       setIsLoading(false);
