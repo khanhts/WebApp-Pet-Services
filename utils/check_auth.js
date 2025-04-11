@@ -14,13 +14,14 @@ module.exports = {
           const token = authorization.split(" ")[1]; // Extract the token
 
           // Verify the token
-          const decoded = jwt.verify(token, constants.SECRET_KEY);
+          const result = jwt.verify(token, constants.SECRET_KEY);
 
           // Check if the token is expired
-          if (decoded.exp * 1000 > Date.now()) {
-            req.accessToken = token; // Attach the token to the request
-            req.user = decoded; // Attach the decoded user data to the request
-            next(); // Proceed to the next middleware or route
+          if (result.expire > Date.now()) {
+            let user = await userController.GetUserByID(result.id);
+            req.accessToken = token;
+            req.user = user;
+            next();
           } else {
             // Token expired
             const error = new Error("Token expired");
@@ -40,14 +41,6 @@ module.exports = {
         throw error;
       }
     } catch (error) {
-      // Handle JWT-specific errors
-      if (error.name === "JsonWebTokenError") {
-        error.message = "Invalid token";
-        error.statusCode = 403;
-      } else if (error.name === "TokenExpiredError") {
-        error.message = "Token expired";
-        error.statusCode = 403;
-      }
       next(error); // Pass the error to the global error handler
     }
   },
@@ -55,16 +48,15 @@ module.exports = {
   check_authorization: function (roles) {
     return async function (req, res, next) {
       try {
-        const roleOfUser = req.user.role; // Assuming `req.user` contains the role
+        console.log("User role:", req.user.role.name);
+        let roleOfUser = req.user.role.name;
         if (roles.includes(roleOfUser)) {
-          next(); // User is authorized
+          next();
         } else {
-          const error = new Error("You do not have the required permissions");
-          error.statusCode = 403;
-          throw error;
+          throw new Error("ban khong co quyen");
         }
       } catch (error) {
-        next(error); // Pass the error to the global error handler
+        next(error);
       }
     };
   },

@@ -28,6 +28,7 @@ router.post("/login", async function (req, res, next) {
     let accessToken = jwt.sign(
       {
         id: userID,
+        expire: new Date(Date.now() + 1000 * 60 * 1000).getTime(), // 15 minutes from now
       },
       constants.SECRET_KEY,
       { expiresIn: "15m" }
@@ -36,6 +37,7 @@ router.post("/login", async function (req, res, next) {
     let refreshToken = jwt.sign(
       {
         id: userID,
+        expire: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).getTime(), // 7 days from now
       },
       constants.REFRESH_SECRET_KEY,
       { expiresIn: "7d" }
@@ -64,7 +66,7 @@ router.post(
       let newUser = await userController.CreateAnUser(
         body.email,
         body.password,
-        body.fullname,
+        body.fullName,
         body.phone,
         body.address,
         "customer"
@@ -108,7 +110,7 @@ router.post(
 router.get("/me", check_authentication, async function (req, res, next) {
   try {
     if (req.user) {
-      const user = await userController.getUserById(req.user.id); // Fetch user details
+      const user = await userController.GetUserByID(req.user.id); // Fetch user details
       res.status(200).json({ user }); // Return user details
     } else {
       res.status(403).json({ message: "Unauthorized" });

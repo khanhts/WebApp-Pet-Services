@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const InvoiceSchema = new mongoose.Schema(
   {
-    customer: {
+    customerId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Reference to the User model
+      ref: "users",
       required: true,
     },
     totalAmount: {
@@ -20,5 +20,4 @@ const InvoiceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Invoice = mongoose.model("Invoice", InvoiceSchema);
-module.exports = Invoice;
+module.exports = mongoose.model("Invoice", InvoiceSchema);

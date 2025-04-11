@@ -4,6 +4,8 @@ import "./ProductCard.css";
 export default function ProductCard() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [tags, setTags] = useState([]); // State to store tags
+  const [selectedTag, setSelectedTag] = useState(""); // State to store the selected tag
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,24 +16,32 @@ export default function ProductCard() {
   // Quantity state for all products
   const [quantities, setQuantities] = useState({});
 
-  // Fetch products from the API
+  // Fetch products and tags from the API
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProductsAndTags = async () => {
       try {
-        const response = await fetch("http://localhost:3000/products");
-        if (!response.ok) {
+        const productResponse = await fetch("http://localhost:3000/products");
+        if (!productResponse.ok) {
           throw new Error("Failed to fetch products");
         }
-        const data = await response.json();
-        setProducts(data.data);
-        setFilteredProducts(data.data);
+        const productData = await productResponse.json();
+        setProducts(productData.data);
+        setFilteredProducts(productData.data);
 
         // Initialize quantities for all products
         const initialQuantities = {};
-        data.data.forEach((product) => {
+        productData.data.forEach((product) => {
           initialQuantities[product._id] = 1; // Default quantity is 1
         });
         setQuantities(initialQuantities);
+
+        // Fetch tags
+        const tagResponse = await fetch("http://localhost:3000/tags");
+        if (!tagResponse.ok) {
+          throw new Error("Failed to fetch tags");
+        }
+        const tagData = await tagResponse.json();
+        setTags(tagData.data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -39,7 +49,7 @@ export default function ProductCard() {
       }
     };
 
-    fetchProducts();
+    fetchProductsAndTags();
   }, []);
 
   // Pagination logic
@@ -63,6 +73,25 @@ export default function ProductCard() {
       product.name.toLowerCase().includes(searchTerm)
     );
     setFilteredProducts(filtered);
+    setCurrentPage(1); // Reset to the first page
+  };
+
+  // Filter by tag functionality
+  const handleTagFilter = (event) => {
+    const selectedTagId = event.target.value;
+    setSelectedTag(selectedTagId);
+
+    if (selectedTagId === "") {
+      // If no tag is selected, show all products
+      setFilteredProducts(products);
+    } else {
+      // Filter products by the selected tag
+      const filtered = products.filter((product) =>
+        product.tags.some((tag) => tag._id === selectedTagId)
+      );
+      setFilteredProducts(filtered);
+    }
+
     setCurrentPage(1); // Reset to the first page
   };
 
@@ -103,6 +132,18 @@ export default function ProductCard() {
           className="search-bar"
           onChange={handleSearch}
         />
+        <select
+          className="tag-filter"
+          value={selectedTag}
+          onChange={handleTagFilter}
+        >
+          <option value="">All Tags</option>
+          {tags.map((tag) => (
+            <option key={tag._id} value={tag._id}>
+              {tag.name}
+            </option>
+          ))}
+        </select>
       </header>
 
       <section className="product-list">

@@ -1,5 +1,5 @@
 let mongoose = require("mongoose");
-const tagSchema = new Schema({
+const tagSchema = mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String },
 });

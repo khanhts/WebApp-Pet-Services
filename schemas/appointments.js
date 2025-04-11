@@ -1,37 +1,58 @@
-let mongoose = require('mongoose');
-let appointmentsSchema = mongoose.Schema({
-    checkupDate:{
-        type:Date,
-        required:true
+const mongoose = require("mongoose");
+
+const appointmentSchema = new mongoose.Schema(
+  {
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Reference to the User model
+      required: true,
     },
-    customer:{
-        type:mongoose.Types.ObjectId,
-        ref:'users',
-        required:true
+    pet: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    vet:{
-        type:mongoose.Types.ObjectId,
-        ref:'users',
-        required:true
+    date: {
+      type: Date,
+      required: true,
     },
-    petInfo:{
-        type:String,
-        default:"",
+    appointment_time: {
+      type: String,
+      required: true,
+      enum: [
+        "08:00",
+        "08:30",
+        "09:00",
+        "09:30",
+        "10:00",
+        "10:30",
+        "11:00",
+        "13:00",
+        "13:30",
+        "14:00",
+        "14:30",
+        "15:00",
+        "15:30",
+        "16:00",
+      ],
     },
-    description:{
-        type:String,
-        default:"",
+    reason: {
+      type: String,
+      trim: true,
     },
-    status:{
-        type:String,
-        enum:['pending','approved','completed','cancelled'],
-        default:'pending'
+    status: {
+      type: String,
+      enum: ["Pending", "Confirmed", "Cancelled"],
+      default: "Pending",
     },
-    isDelete:{
-        type:Boolean,
-        default: false,
-    }
-},{
-    timestamps:true
-})
-module.exports = mongoose.model('appointments',appointmentsSchema)
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = mongoose.model("Appointment", appointmentSchema);

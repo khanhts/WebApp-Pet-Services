@@ -25,6 +25,15 @@
     width: 300px;
 }
 
+/* Tag filter dropdown */
+.tag-filter {
+    margin-left: 10px;
+    padding: 5px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
 /* Product list styles */
 .product-list {
     display: flex;

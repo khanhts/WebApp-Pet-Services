@@ -1,52 +1,72 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import api from "../api";
 
-const AuthContext = createContext(undefined);
+const AuthContext = createContext();
 
 export const useAuth = () => {
-  const authContext = useContext(AuthContext);
-  if (!authContext) {
+  const context = useContext(AuthContext);
+  if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
-  return authContext;
+  return context;
 };
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(null); // Store token in memory
+  const [token, setToken] = useState(
+    () => localStorage.getItem("token") || null
+  );
+  const [role, setRole] = useState(() => localStorage.getItem("role") || null);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch user data on initial load
+  // Fetch user details and role after login or app initialization
+  const fetchUserDetails = async () => {
+    try {
+      const response = await api.get("/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const userData = response.data.user;
+      setUser(userData);
+      setRole(userData.role.name);
+      localStorage.setItem("role", userData.role.name);
+      localStorage.setItem("userId", userData._id);
+    } catch (error) {
+      console.error("Failed to fetch user details:", error);
+      logout(); // Clear token and role if fetching user details fails
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Login function to set token and fetch user details
+  const login = (newToken) => {
+    setToken(newToken);
+    localStorage.setItem("token", newToken);
+  };
+
+  // Logout function to clear token, role, and user data
+  const logout = () => {
+    setToken(null);
+    setRole(null);
+    setUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
+  };
+
+  // Fetch user details on app initialization if token exists
   useEffect(() => {
-    const fetchMe = async () => {
-      try {
-        const response = await api.get("/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("User authenticated:", response.data.user);
-      } catch (error) {
-        if (error.response && error.response.status === 403) {
-          console.log("Unauthorized: Token expired or invalid");
-          setToken(null); // Clear the token if unauthorized
-        } else {
-          console.error("Failed to fetch user data:", error);
-        }
-      }
-    };
-
     if (token) {
-      fetchMe();
+      fetchUserDetails();
+    } else {
+      setIsLoading(false); // No token, stop loading
     }
   }, [token]);
 
-  // Add Authorization header to outgoing requests
-  useLayoutEffect(() => {
+  // Automatically attach token to API requests
+  useEffect(() => {
     const authInterceptor = api.interceptors.request.use((config) => {
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -59,40 +79,11 @@ export const AuthProvider = ({ children }) => {
     };
   }, [token]);
 
-  // Handle token refresh on 403 errors
-  useLayoutEffect(() => {
-    const responseInterceptor = api.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        const originalRequest = error.config;
-        if (
-          error.response &&
-          error.response.status === 403 &&
-          !originalRequest._retry
-        ) {
-          originalRequest._retry = true;
-          try {
-            const response = await api.get("/auth/refresh");
-            setToken(response.data.accessToken); // Update token in memory
-            originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`;
-            return api(originalRequest); // Retry the original request
-          } catch (refreshError) {
-            console.log("Token refresh failed:", refreshError);
-            setToken(null); // Clear the token if refresh fails
-          }
-        }
-        return Promise.reject(error);
-      }
-    );
-
-    return () => {
-      api.interceptors.response.eject(responseInterceptor);
-    };
-  }, [token]);
-
   return (
-    <AuthContext.Provider value={{ token, setToken }}>
-      {children}
+    <AuthContext.Provider
+      value={{ token, role, user, login, logout, isLoading }}
+    >
+      {!isLoading ? children : <div>Loading...</div>}
     </AuthContext.Provider>
   );
 };

@@ -1,0 +1,26 @@
+.access-denied {
+    text-align: center;
+    padding: 50px;
+}
+
+.access-denied h1 {
+    font-size: 2.5rem;
+    color: #f44336;
+    margin-bottom: 20px;
+}
+
+.access-denied p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.back-home-link {
+    text-decoration: none;
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.back-home-link:hover {
+    text-decoration: underline;
+}

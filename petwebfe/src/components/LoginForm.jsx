@@ -2,11 +2,11 @@ import styles from "./LoginForm.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { login } from "../axios/AxiosAuth";
+import { signin } from "../axios/AxiosAuth";
 
 export default function LoginForm() {
   const navigate = useNavigate();
-  const { setToken } = useAuth();
+  const { login } = useAuth();
 
   const [errorMessage, setErrorMessage] = useState(""); // Store a single error message
   const [isLoading, setIsLoading] = useState(false);
@@ -44,8 +44,9 @@ export default function LoginForm() {
     setIsLoading(true);
 
     try {
-      const data = await login(email, password);
-      setToken(data.data.accessToken);
+      const data = await signin(email, password);
+      console.log("Login data:", data);
+      login(data.data.accessToken);
       alert("Login successful!");
       navigate("/");
     } catch (error) {

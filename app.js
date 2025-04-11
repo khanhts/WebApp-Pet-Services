@@ -16,7 +16,8 @@ var categoriesRouter = require("./routes/categories");
 var productsRouter = require("./routes/products");
 var menuRouter = require("./routes/menu");
 var reviewRouter = require("./routes/review");
-var invoiceRouter = require("./routes/invoice");
+var invoiceRouter = require("./routes/invoices");
+var tagsRouter = require("./routes/tags");
 
 var app = express();
 
@@ -50,7 +51,8 @@ app.use("/categories", categoriesRouter);
 app.use("/products", productsRouter);
 app.use("/menu", menuRouter);
 app.use("/review", reviewRouter);
-app.use("/invoice", invoiceRouter);
+app.use("/invoices", invoiceRouter);
+app.use("/tags", tagsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

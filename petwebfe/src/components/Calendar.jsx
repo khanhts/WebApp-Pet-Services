@@ -11,36 +11,39 @@ export default function Calendar() {
   const [selectedDate, setSelectedDate] = useState("");
   const [appointments, setAppointments] = useState([]);
   const [disabledDates, setDisabledDates] = useState([]);
-
+  const userId = localStorage.getItem("userId");
   useEffect(() => {
-    // Fetch disabled dates (e.g., holidays or fully booked days)
-    const fetchDisabledDates = async () => {
-      const holidays = ["2025-01-01", "2025-04-30", "2025-05-01", "2025-09-02"];
-      setDisabledDates(holidays);
-      //   try {
-      //     const response = await fetch("/appointment/getDisabledDates");
-      //     const serverDisabledDates = await response.json();
-      //     setDisabledDates([...new Set([...serverDisabledDates, ...holidays])]);
-      //   } catch (error) {
-      //     console.error("Failed to fetch disabled dates:", error);
-      //     setDisabledDates(holidays);
-      //   }
-    };
+    const holidays = [
+      { month: 1, day: 1 },
+      { month: 4, day: 30 },
+      { month: 5, day: 1 },
+      { month: 9, day: 2 },
+    ];
 
-    fetchDisabledDates();
+    const currentYear = new Date().getFullYear();
+    const formattedHolidays = holidays.map(
+      (holiday) =>
+        `${currentYear}-${String(holiday.month).padStart(2, "0")}-${String(
+          holiday.day
+        ).padStart(2, "0")}`
+    );
+
+    setDisabledDates(formattedHolidays);
   }, []);
 
-  const handleDateClick = async (info) => {
+  const handleDateClick = (info) => {
     const selectedDate = info.dateStr;
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date();
     const jsDate = new Date(selectedDate);
 
-    if (selectedDate < today) {
+    const gmt7Today = new Date(today.getTime() + 7 * 60 * 60 * 1000);
+    gmt7Today.setHours(0, 0, 0, 0);
+    if (jsDate < gmt7Today) {
       alert("❌ Can't choose days in the past!");
       return;
     }
 
-    const dayOfWeek = jsDate.getDay(); // 0 (Sunday) to 6 (Saturday)
+    const dayOfWeek = jsDate.getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) {
       alert("❌ Invalid date!");
       return;
@@ -51,22 +54,52 @@ export default function Calendar() {
       return;
     }
 
-    setSelectedDate(selectedDate);
+    const gmt7Date = new Date(jsDate.getTime() + 7 * 60 * 60 * 1000);
+    setSelectedDate(gmt7Date.toISOString().split("T")[0]);
     setModalVisible(true);
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
+
+    if (!userId) {
+      alert("You must be logged in to make an appointment.");
+      window.location.href = "/auth/login";
+      return;
+    }
+
     const formData = new FormData(event.target);
     const newAppointment = {
       pet: formData.get("pet"),
-      user_id: formData.get("user_id"),
-      date: `${selectedDate} ${formData.get("appointment_time")}:00`,
+      user_id: userId,
+      date: selectedDate,
+      appointment_time: formData.get("appointment_time"),
       reason: formData.get("reason"),
     };
 
-    setAppointments([...appointments, newAppointment]);
-    setModalVisible(false);
+    try {
+      const response = await fetch("http://localhost:3000/appointments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token for authentication
+        },
+        body: JSON.stringify(newAppointment),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create appointment");
+      }
+
+      const createdAppointment = await response.json();
+      alert("Appointment created successfully!");
+      setAppointments([...appointments, createdAppointment.data]); // Add the new appointment to the state
+      setModalVisible(false);
+    } catch (error) {
+      console.error("Error creating appointment:", error.message);
+      alert("Failed to create appointment. Please try again.");
+    }
   };
 
   return (
@@ -103,11 +136,16 @@ export default function Calendar() {
               </div>
               <div className="modal-body">
                 <form onSubmit={handleFormSubmit}>
-                  <input
-                    type="hidden"
-                    name="appointment_date"
-                    value={selectedDate}
-                  />
+                  <div className="mb-3">
+                    <label>Appointment Date:</label>
+                    <input
+                      type="text"
+                      name="appointment_date"
+                      className="form-control"
+                      value={selectedDate}
+                      readOnly
+                    />
+                  </div>
                   <div className="mb-3">
                     <label>Pet Info:</label>
                     <input
@@ -123,7 +161,8 @@ export default function Calendar() {
                       name="user_id"
                       className="form-control"
                       hidden
-                      value="123" // Replace with actual user ID
+                      value={userId}
+                      readOnly
                     />
                   </div>
                   <div className="mb-3">

@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import "./Cart.css";
+import { useAuth } from "../context/AuthContext";
 
 export default function Cart() {
+  const { token } = useAuth();
+
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   // Load cart from localStorage on component mount
   useEffect(() => {
@@ -52,6 +57,20 @@ export default function Cart() {
     }
   };
 
+  // Handle checkout button click
+  const handleCheckout = () => {
+    if (!token) {
+      alert("You must be logged in to proceed to checkout.");
+      navigate("/auth/login"); // Redirect to the login page
+      return;
+    }
+    if (cart.length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
+    navigate("/checkout"); // Navigate to the checkout page
+  };
+
   return (
     <div className="cart-page">
       <header className="cart-header">
@@ -96,7 +115,12 @@ export default function Cart() {
             <button onClick={clearCart} className="clear-cart-button">
               Clear Cart
             </button>
-            <button className="checkout-button">Proceed to Checkout</button>
+            <button
+              onClick={handleCheckout} // Add onClick handler for checkout
+              className="checkout-button"
+            >
+              Proceed to Checkout
+            </button>
           </div>
         </footer>
       )}

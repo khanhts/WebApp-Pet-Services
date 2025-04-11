@@ -31,7 +31,7 @@ export default function MenuBar() {
     return (
       <ul className="menu">
         {items.map((item) => (
-          <li key={item.id} className="menu-item">
+          <li key={item._id} className="menu-item">
             <a href={item.url}>{item.text}</a>
             {item.children && item.children.length > 0 && (
               <div className="submenu">{renderMenuItems(item.children)}</div>
