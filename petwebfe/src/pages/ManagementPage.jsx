@@ -13,7 +13,7 @@ export default function ManagementPage() {
         <Link to="service-manage">Service Management</Link>
       </nav>
       <div className="management-content">
-        <Outlet /> {/* Render nested routes here */}
+        <Outlet />
       </div>
     </div>
   );

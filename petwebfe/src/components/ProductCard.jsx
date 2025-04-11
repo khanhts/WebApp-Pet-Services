@@ -4,19 +4,16 @@ import "./ProductCard.css";
 export default function ProductCard() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [tags, setTags] = useState([]); // State to store tags
-  const [selectedTag, setSelectedTag] = useState(""); // State to store the selected tag
+  const [tags, setTags] = useState([]);
+  const [selectedTag, setSelectedTag] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 9; // 3 columns x 3 rows per page
+  const productsPerPage = 9;
 
-  // Quantity state for all products
   const [quantities, setQuantities] = useState({});
 
-  // Fetch products and tags from the API
   useEffect(() => {
     const fetchProductsAndTags = async () => {
       try {
@@ -28,14 +25,12 @@ export default function ProductCard() {
         setProducts(productData.data);
         setFilteredProducts(productData.data);
 
-        // Initialize quantities for all products
         const initialQuantities = {};
         productData.data.forEach((product) => {
-          initialQuantities[product._id] = 1; // Default quantity is 1
+          initialQuantities[product._id] = 1;
         });
         setQuantities(initialQuantities);
 
-        // Fetch tags
         const tagResponse = await fetch("http://localhost:3000/tags");
         if (!tagResponse.ok) {
           throw new Error("Failed to fetch tags");
@@ -52,7 +47,6 @@ export default function ProductCard() {
     fetchProductsAndTags();
   }, []);
 
-  // Pagination logic
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(
@@ -66,36 +60,31 @@ export default function ProductCard() {
     setCurrentPage(pageNumber);
   };
 
-  // Search functionality
   const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
     const filtered = products.filter((product) =>
       product.name.toLowerCase().includes(searchTerm)
     );
     setFilteredProducts(filtered);
-    setCurrentPage(1); // Reset to the first page
+    setCurrentPage(1);
   };
 
-  // Filter by tag functionality
   const handleTagFilter = (event) => {
     const selectedTagId = event.target.value;
     setSelectedTag(selectedTagId);
 
     if (selectedTagId === "") {
-      // If no tag is selected, show all products
       setFilteredProducts(products);
     } else {
-      // Filter products by the selected tag
       const filtered = products.filter((product) =>
         product.tags.some((tag) => tag._id === selectedTagId)
       );
       setFilteredProducts(filtered);
     }
 
-    setCurrentPage(1); // Reset to the first page
+    setCurrentPage(1);
   };
 
-  // Add to Cart functionality
   const handleAddToCart = (product) => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingProductIndex = cart.findIndex(
@@ -103,10 +92,8 @@ export default function ProductCard() {
     );
 
     if (existingProductIndex !== -1) {
-      // Update quantity if the product already exists in the cart
       cart[existingProductIndex].quantity += quantities[product._id];
     } else {
-      // Add new product to the cart
       cart.push({ ...product, quantity: quantities[product._id] });
     }
 
@@ -114,11 +101,10 @@ export default function ProductCard() {
     alert(`${product.name} has been added to the cart!`);
   };
 
-  // Handle quantity change
   const handleQuantityChange = (productId, value) => {
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
-      [productId]: Math.max(1, parseInt(value) || 1), // Ensure quantity is at least 1
+      [productId]: Math.max(1, parseInt(value) || 1),
     }));
   };
 
@@ -189,8 +175,6 @@ export default function ProductCard() {
           <p>No products found.</p>
         )}
       </section>
-
-      {/* Pagination Section */}
       {filteredProducts.length > productsPerPage && (
         <div className="pagination">
           {Array.from({ length: totalPages }, (_, index) => (

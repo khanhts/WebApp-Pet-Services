@@ -8,7 +8,6 @@ export default function CategoryManagePage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
 
-  // Fetch categories from the API
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -26,7 +25,6 @@ export default function CategoryManagePage() {
     fetchCategories();
   }, []);
 
-  // Handle delete category
   const handleDelete = async (categoryId) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
       try {
@@ -53,17 +51,14 @@ export default function CategoryManagePage() {
     }
   };
 
-  // Handle create or update category
   const handleFormSubmit = (newCategory) => {
     if (selectedCategory) {
-      // Update category
       setCategories(
         categories.map((category) =>
           category._id === newCategory._id ? newCategory : category
         )
       );
     } else {
-      // Create category
       setCategories([...categories, newCategory]);
     }
     setIsFormVisible(false);

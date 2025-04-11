@@ -49,7 +49,7 @@ module.exports = {
         price: price,
         quantity: quantity,
         category: cate._id,
-        tags: validTags.map((tag) => tag._id), // Store tag IDs
+        tags: validTags.map((tag) => tag._id),
       });
       return await newProduct.save();
     } catch (error) {
@@ -86,7 +86,7 @@ module.exports = {
         if (validTags.length !== updatedInfo.tags.length) {
           throw new Error("Error: Some tags are invalid");
         }
-        updatedInfo.tags = validTags.map((tag) => tag._id); // Store tag IDs
+        updatedInfo.tags = validTags.map((tag) => tag._id);
       }
       for (let key in updatedInfo) {
         if (allowFields.includes(key)) {

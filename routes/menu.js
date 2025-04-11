@@ -8,7 +8,6 @@ let {
   check_authorization,
 } = require("../utils/check_auth");
 
-/* GET users listing. */
 router.get("/", async function (req, res, next) {
   try {
     let menus = await menuController.GetMenuHierarchy();

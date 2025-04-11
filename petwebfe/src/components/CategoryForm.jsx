@@ -22,7 +22,6 @@ export default function CategoryForm({ category, onClose, onSubmit }) {
       const token = localStorage.getItem("token");
       let response;
       if (category) {
-        // Update category
         response = await axios.put(
           `http://localhost:3000/categories/${category._id}`,
           formData,
@@ -33,7 +32,6 @@ export default function CategoryForm({ category, onClose, onSubmit }) {
           }
         );
       } else {
-        // Create category
         response = await axios.post(
           "http://localhost:3000/categories",
           formData,

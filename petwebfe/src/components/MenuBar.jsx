@@ -6,7 +6,6 @@ export default function MenuBar() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch menu items from the backend
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
@@ -15,7 +14,7 @@ export default function MenuBar() {
           throw new Error("Failed to fetch menu items");
         }
         const data = await response.json();
-        setMenuItems(data.data); // Assuming the menu hierarchy is in `data.data`
+        setMenuItems(data.data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -26,7 +25,6 @@ export default function MenuBar() {
     fetchMenuItems();
   }, []);
 
-  // Recursive function to render menu items and submenus
   const renderMenuItems = (items) => {
     return (
       <ul className="menu">

@@ -8,7 +8,6 @@ export default function TagManagePage() {
   const [selectedTag, setSelectedTag] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
 
-  // Fetch tags from the API
   useEffect(() => {
     const fetchTags = async () => {
       try {
@@ -26,7 +25,6 @@ export default function TagManagePage() {
     fetchTags();
   }, []);
 
-  // Handle delete tag
   const handleDelete = async (tagId) => {
     if (window.confirm("Are you sure you want to delete this tag?")) {
       try {
@@ -51,13 +49,10 @@ export default function TagManagePage() {
     }
   };
 
-  // Handle create or update tag
   const handleFormSubmit = (newTag) => {
     if (selectedTag) {
-      // Update tag
       setTags(tags.map((tag) => (tag._id === newTag._id ? newTag : tag)));
     } else {
-      // Create tag
       setTags([...tags, newTag]);
     }
     setIsFormVisible(false);

@@ -1,21 +1,20 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-var roleController = require('../controllers/roles')
-let {CreateErrorRes,CreateSuccessRes} = require('../utils/responseHandler')
+var roleController = require("../controllers/roles");
+let { CreateErrorRes, CreateSuccessRes } = require("../utils/responseHandler");
 
-/* GET users listing. */
-router.get('/', async function(req, res, next) {
+router.get("/", async function (req, res, next) {
   let roles = await roleController.GetAllRoles();
-  CreateSuccessRes(res,roles,200);
+  CreateSuccessRes(res, roles, 200);
 });
 
-router.post('/', async function(req, res, next) {
- try {
+router.post("/", async function (req, res, next) {
+  try {
     let newRole = await roleController.CreateARole(req.body.name);
-    CreateSuccessRes(res,newRole,200);
- } catch (error) {
-    next(error)
- }
+    CreateSuccessRes(res, newRole, 200);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

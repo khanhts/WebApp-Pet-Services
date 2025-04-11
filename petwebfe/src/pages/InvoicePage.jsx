@@ -4,7 +4,7 @@ import axios from "axios";
 import "./InvoicePage.css";
 
 export default function InvoicePage() {
-  const { id } = useParams(); // Get the invoice ID from the URL
+  const { id } = useParams();
   const [invoice, setInvoice] = useState(null);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

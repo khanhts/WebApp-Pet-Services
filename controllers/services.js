@@ -1,7 +1,6 @@
 const serviceModel = require("../schemas/services");
 
 module.exports = {
-  // Get all services (excluding deleted ones)
   GetAllServices: async function () {
     try {
       return await serviceModel.find({ isDeleted: false });
@@ -10,7 +9,6 @@ module.exports = {
     }
   },
 
-  // Get a single service by ID
   GetServiceById: async function (id) {
     try {
       const service = await serviceModel.findById(id);
@@ -23,7 +21,6 @@ module.exports = {
     }
   },
 
-  // Create a new service
   CreateService: async function (serviceData) {
     try {
       const newService = new serviceModel(serviceData);
@@ -33,7 +30,6 @@ module.exports = {
     }
   },
 
-  // Update an existing service
   UpdateService: async function (id, updatedData) {
     try {
       const service = await serviceModel.findByIdAndUpdate(id, updatedData, {
@@ -48,7 +44,6 @@ module.exports = {
     }
   },
 
-  // Soft delete a service
   DeleteService: async function (id) {
     try {
       const service = await serviceModel.findByIdAndUpdate(

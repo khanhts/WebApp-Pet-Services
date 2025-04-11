@@ -8,7 +8,7 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const [errorMessage, setErrorMessage] = useState(""); // Store a single error message
+  const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event) => {
@@ -16,10 +16,8 @@ export default function LoginForm() {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    // Clear previous error message
     setErrorMessage("");
 
-    // Validation
     if (!email) {
       setErrorMessage("Vui lòng nhập email.");
       return;
@@ -61,7 +59,6 @@ export default function LoginForm() {
     <div className={styles["login-form"]}>
       <h2>Login</h2>
       {errorMessage && <p className="error">{errorMessage}</p>}{" "}
-      {/* Display a single error message */}
       {isLoading && <p>Loading...</p>}
       <form onSubmit={handleSubmit}>
         <div className={styles["form-group"]}>

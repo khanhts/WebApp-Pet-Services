@@ -1,22 +1,20 @@
 const appointmentModel = require("../schemas/appointments");
 
 module.exports = {
-  // Get all appointments (exclude deleted ones)
   GetAllAppointments: async function () {
     try {
       return await appointmentModel
         .find({ isDeleted: false })
-        .populate("user_id"); // Exclude deleted appointments
+        .populate("user_id");
     } catch (error) {
       throw new Error("Error fetching appointments: " + error.message);
     }
   },
 
-  // Get appointment by ID (exclude deleted ones)
   GetAppointmentByID: async function (id) {
     try {
       const appointment = await appointmentModel
-        .findOne({ _id: id, isDeleted: false }) // Exclude deleted appointments
+        .findOne({ _id: id, isDeleted: false })
         .populate("user_id");
       if (!appointment) {
         throw new Error("Appointment not found");
@@ -27,7 +25,6 @@ module.exports = {
     }
   },
 
-  // Create a new appointment
   CreateAppointment: async function (appointmentData) {
     try {
       const newAppointment = new appointmentModel(appointmentData);
@@ -37,7 +34,6 @@ module.exports = {
     }
   },
 
-  // Update an appointment
   UpdateAppointment: async function (id, updatedInfo) {
     try {
       const appointment = await appointmentModel.findByIdAndUpdate(
@@ -56,12 +52,11 @@ module.exports = {
     }
   },
 
-  // Soft delete an appointment
   DeleteAppointment: async function (id) {
     try {
       const appointment = await appointmentModel.findByIdAndUpdate(
         id,
-        { isDeleted: true }, // Mark as deleted
+        { isDeleted: true },
         { new: true }
       );
       if (!appointment) {

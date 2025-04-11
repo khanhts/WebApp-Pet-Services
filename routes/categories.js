@@ -12,7 +12,6 @@ let {
   CreateFailRes,
 } = require("../utils/responseHandler");
 
-/* GET users listing. */
 router.get("/", async function (req, res, next) {
   try {
     let categories = await categoryController.GetAllCategories();

@@ -27,14 +27,13 @@ mongoose.connection.on("connected", () => {
   console.log("connected");
 });
 
-// view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allow requests from this origin
-    credentials: true, // Allow cookies to be sent with requests
+    origin: "http://localhost:5173",
+    credentials: true,
   })
 );
 app.use(logger("dev"));
@@ -56,13 +55,12 @@ app.use("/invoices", invoiceRouter);
 app.use("/tags", tagsRouter);
 app.use("/services", servicesRouter);
 
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
 app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500; // Default to 500 if no statusCode is set
+  const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
   res.status(statusCode).json({ error: message });
 });

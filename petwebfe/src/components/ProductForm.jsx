@@ -79,7 +79,6 @@ export default function ProductForm({ product, onClose, onSubmit }) {
           }
         );
       } else {
-        // Create product
         response = await axios.post(
           "http://localhost:3000/products",
           formData,

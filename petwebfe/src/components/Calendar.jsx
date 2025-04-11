@@ -82,7 +82,7 @@ export default function Calendar() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token for authentication
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(newAppointment),
       });
@@ -94,7 +94,7 @@ export default function Calendar() {
 
       const createdAppointment = await response.json();
       alert("Appointment created successfully!");
-      setAppointments([...appointments, createdAppointment.data]); // Add the new appointment to the state
+      setAppointments([...appointments, createdAppointment.data]);
       setModalVisible(false);
     } catch (error) {
       console.error("Error creating appointment:", error.message);
@@ -116,7 +116,6 @@ export default function Calendar() {
         }))}
       />
 
-      {/* Modal for Appointment */}
       {modalVisible && (
         <div
           className="modal fade show"

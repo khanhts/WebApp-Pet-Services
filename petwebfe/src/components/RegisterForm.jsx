@@ -15,13 +15,11 @@ export default function RegisterForm() {
     const phone = event.target.phone.value;
     const address = event.target.address.value;
 
-    // Validate password match
     if (password !== confirmPassword) {
       setErrorMessages(["Passwords do not match!"]);
       return;
     }
 
-    // Clear previous errors and set loading state
     setErrorMessages([]);
     setIsLoading(true);
 
@@ -43,19 +41,16 @@ export default function RegisterForm() {
       const data = await response.json();
 
       if (response.ok) {
-        // Handle successful registration
         console.log("Registration successful:", data);
         alert("Registration successful! Please log in.");
       } else {
-        // Handle registration failure
         setErrorMessages([data.message || "Registration failed."]);
       }
     } catch (error) {
-      // Handle network or server errors
       setErrorMessages(["An error occurred. Please try again later."]);
       console.error("Error during registration:", error);
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false);
     }
   };
 

@@ -7,7 +7,6 @@ let {
   check_authorization,
 } = require("../utils/check_auth");
 
-// Get all appointments
 router.get(
   "/",
   check_authentication,
@@ -22,7 +21,6 @@ router.get(
   }
 );
 
-// Get appointment by ID
 router.get(
   "/:id",
   check_authentication,
@@ -39,7 +37,6 @@ router.get(
   }
 );
 
-// Create a new appointment
 router.post("/", check_authentication, async (req, res) => {
   try {
     console.log(req.body);
@@ -52,7 +49,6 @@ router.post("/", check_authentication, async (req, res) => {
   }
 });
 
-// Update an appointment
 router.put(
   "/:id",
   check_authentication,
@@ -70,7 +66,6 @@ router.put(
   }
 );
 
-// Delete an appointment
 router.delete(
   "/:id",
   check_authentication,

@@ -8,7 +8,6 @@ export default function ProductManagePage() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
 
-  // Fetch products from the API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -26,7 +25,6 @@ export default function ProductManagePage() {
     fetchProducts();
   }, []);
 
-  // Handle delete product
   const handleDelete = async (productId) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
@@ -51,17 +49,14 @@ export default function ProductManagePage() {
     }
   };
 
-  // Handle create or update product
   const handleFormSubmit = (newProduct) => {
     if (selectedProduct) {
-      // Update product
       setProducts(
         products.map((product) =>
           product._id === newProduct._id ? newProduct : product
         )
       );
     } else {
-      // Create product
       setProducts([...products, newProduct]);
     }
     setIsFormVisible(false);

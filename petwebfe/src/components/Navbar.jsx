@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import style from "./navbar.module.css";
-import { useAuth } from "../context/AuthContext"; // Import useAuth hook
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const { token, logout } = useAuth(); // Access token and setToken from AuthProvider
+  const { token, logout } = useAuth();
   const role = localStorage.getItem("role");
   console.log("Role from localStorage:", role);
   const handleLogin = () => {
@@ -12,8 +12,8 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    logout(); // Call the logout function from AuthProvider
-    navigate("/"); // Redirect to the homepage after logout
+    logout();
+    navigate("/");
   };
 
   return (

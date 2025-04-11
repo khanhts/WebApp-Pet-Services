@@ -3,20 +3,18 @@ import "./SearchProduct.css";
 
 export default function SearchProduct() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [allProducts, setAllProducts] = useState([]); // Store the full list of products
+  const [allProducts, setAllProducts] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const handleSearch = async (event) => {
     const input = event.target.value;
     setSearchTerm(input);
 
-    // Hide dropdown if input is empty
     if (!input) {
       setDropdownVisible(false);
       return;
     }
 
-    // Check for forbidden characters
     const forbiddenChars = /[\/\\|@=<>]/;
     if (forbiddenChars.test(input)) {
       alert(
@@ -26,7 +24,6 @@ export default function SearchProduct() {
       return;
     }
 
-    // Fetch filtered products from the API
     try {
       const response = await fetch("http://localhost:3000/products/search", {
         method: "POST",
@@ -42,7 +39,7 @@ export default function SearchProduct() {
       if (products.length === 0) {
         setAllProducts([{ name: "No products found", isPlaceholder: true }]);
       } else {
-        setAllProducts(products); // Store the full list of products
+        setAllProducts(products);
       }
 
       setDropdownVisible(true);
@@ -54,7 +51,7 @@ export default function SearchProduct() {
 
   const handleProductClick = (productName) => {
     setSearchTerm(productName);
-    setDropdownVisible(false); // Hide dropdown after selection
+    setDropdownVisible(false);
   };
 
   return (

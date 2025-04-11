@@ -1,4 +1,3 @@
-/* General styles */
 .cart-page {
     font-family: Arial, sans-serif;
     padding: 20px;
@@ -15,7 +14,7 @@
     color: #333;
 }
 
-/* Cart items */
+
 .cart-items {
     display: flex;
     flex-direction: column;
@@ -72,7 +71,7 @@
     background-color: #d32f2f;
 }
 
-/* Cart footer */
+
 .cart-footer {
     margin-top: 20px;
     text-align: right;

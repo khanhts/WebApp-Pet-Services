@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch user details and role after login or app initialization
   const fetchUserDetails = async () => {
     try {
       const response = await api.get("/auth/me", {
@@ -34,19 +33,17 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("userId", userData._id);
     } catch (error) {
       console.error("Failed to fetch user details:", error);
-      logout(); // Clear token and role if fetching user details fails
+      logout();
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Login function to set token and fetch user details
   const login = (newToken) => {
     setToken(newToken);
     localStorage.setItem("token", newToken);
   };
 
-  // Logout function to clear token, role, and user data
   const logout = () => {
     setToken(null);
     setRole(null);
@@ -56,16 +53,14 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("userId");
   };
 
-  // Fetch user details on app initialization if token exists
   useEffect(() => {
     if (token) {
       fetchUserDetails();
     } else {
-      setIsLoading(false); // No token, stop loading
+      setIsLoading(false);
     }
   }, [token]);
 
-  // Automatically attach token to API requests
   useEffect(() => {
     const authInterceptor = api.interceptors.request.use((config) => {
       if (token) {

@@ -3,7 +3,6 @@ const Invoice = require("../schemas/invoice");
 const InvoiceItem = require("../schemas/invoiceItem");
 
 module.exports = {
-  // Create a new invoice
   CreateInvoice: async function (invoiceData) {
     try {
       const newInvoice = new Invoice({

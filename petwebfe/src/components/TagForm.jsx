@@ -22,7 +22,6 @@ export default function TagForm({ tag, onClose, onSubmit }) {
       const token = localStorage.getItem("token");
       let response;
       if (tag) {
-        // Update tag
         response = await axios.put(
           `http://localhost:3000/tags/${tag._id}`,
           formData,
@@ -33,7 +32,6 @@ export default function TagForm({ tag, onClose, onSubmit }) {
           }
         );
       } else {
-        // Create tag
         response = await axios.post("http://localhost:3000/tags", formData, {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -28,7 +28,7 @@ router.post("/login", async function (req, res, next) {
     let accessToken = jwt.sign(
       {
         id: userID,
-        expire: new Date(Date.now() + 15 * 60 * 1000).getTime(), // 15 minutes from now
+        expire: new Date(Date.now() + 15 * 60 * 1000).getTime(),
       },
       constants.SECRET_KEY,
       { expiresIn: "15m" }
@@ -37,7 +37,7 @@ router.post("/login", async function (req, res, next) {
     let refreshToken = jwt.sign(
       {
         id: userID,
-        expire: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).getTime(), // 7 days from now
+        expire: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).getTime(),
       },
       constants.REFRESH_SECRET_KEY,
       { expiresIn: "7d" }
@@ -110,8 +110,8 @@ router.post(
 router.get("/me", check_authentication, async function (req, res, next) {
   try {
     if (req.user) {
-      const user = await userController.GetUserByID(req.user.id); // Fetch user details
-      res.status(200).json({ user }); // Return user details
+      const user = await userController.GetUserByID(req.user.id);
+      res.status(200).json({ user });
     } else {
       res.status(403).json({ message: "Unauthorized" });
     }
@@ -151,8 +151,6 @@ router.post(
     }
   }
 );
-
-//cai 2 thu vien: nodemailer, multer
 
 router.post(
   "/reset_password/:token",
@@ -194,7 +192,7 @@ router.post("/logout", async function (req, res, next) {
 
 router.get("/refresh", async function (req, res, next) {
   try {
-    const refreshToken = req.cookies.refreshToken; // Assuming refresh token is stored in cookies
+    const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
       return res.status(403).json({ message: "Refresh token missing" });
     }

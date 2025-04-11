@@ -4,19 +4,19 @@ const reviewSchema = new mongoose.Schema(
   {
     product: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "product", // Reference to the Product model
+      ref: "product",
       required: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Reference to the User model
+      ref: "User",
       required: true,
     },
     rating: {
       type: Number,
       required: true,
       min: 1,
-      max: 5, // Ratings between 1 and 5
+      max: 5,
     },
     comment: {
       type: String,
@@ -24,7 +24,7 @@ const reviewSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt fields
+    timestamps: true,
   }
 );
 

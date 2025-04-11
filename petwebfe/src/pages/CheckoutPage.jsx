@@ -9,12 +9,10 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load cart and customer information
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(storedCart);
 
-    // Fetch customer info using the auth/me endpoint
     const fetchCustomerInfo = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -42,7 +40,6 @@ export default function CheckoutPage() {
     fetchCustomerInfo();
   }, []);
 
-  // Handle checkout and create invoice
   const handleCheckout = async () => {
     if (cart.length === 0) {
       alert("Your cart is empty.");

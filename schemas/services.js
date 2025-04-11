@@ -9,7 +9,7 @@ const serviceSchema = new mongoose.Schema(
     isDeleted: { type: Boolean, default: false },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt fields
+    timestamps: true,
   }
 );
 module.exports = mongoose.model("services", serviceSchema);

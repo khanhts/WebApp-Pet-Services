@@ -7,7 +7,6 @@ const {
 } = require("../utils/check_auth");
 const constants = require("../utils/constants");
 
-// Create a new tag
 router.post(
   "/",
   check_authentication,
@@ -23,7 +22,6 @@ router.post(
   }
 );
 
-// Get all tags
 router.get("/", async (req, res, next) => {
   try {
     const tags = await tagController.GetAllTags();
@@ -33,7 +31,6 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// Get a single tag by ID
 router.get("/:id", check_authentication, async (req, res, next) => {
   try {
     const tag = await tagController.GetTagById(req.params.id);
@@ -46,7 +43,6 @@ router.get("/:id", check_authentication, async (req, res, next) => {
   }
 });
 
-// Update a tag by ID
 router.put(
   "/:id",
   check_authentication,
@@ -69,7 +65,6 @@ router.put(
   }
 );
 
-// Delete a tag by ID
 router.delete(
   "/:id",
   check_authentication,

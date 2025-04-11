@@ -2,12 +2,9 @@ const Review = require("../schemas/reviews");
 const Product = require("../schemas/products");
 
 module.exports = {
-  // Create a new review
   createReview: async (req, res) => {
     try {
       const { productId, userId, rating, comment } = req.body;
-
-      // Check if the product exists
       const product = await Product.findById(productId);
       if (!product) {
         return res
@@ -15,21 +12,17 @@ module.exports = {
           .json({ success: false, message: "Product not found" });
       }
 
-      // Check if the user has already reviewed this product
       const existingReview = await Review.findOne({
         product: productId,
         user: userId,
       });
       if (existingReview) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "You have already reviewed this product",
-          });
+        return res.status(400).json({
+          success: false,
+          message: "You have already reviewed this product",
+        });
       }
 
-      // Create the review
       const newReview = new Review({
         product: productId,
         user: userId,
@@ -44,7 +37,6 @@ module.exports = {
     }
   },
 
-  // Get all reviews for a product
   getReviewsByProduct: async (req, res) => {
     try {
       const { productId } = req.params;
@@ -59,7 +51,6 @@ module.exports = {
     }
   },
 
-  // Delete a review
   deleteReview: async (req, res) => {
     try {
       const { id } = req.params;

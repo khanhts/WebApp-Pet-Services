@@ -12,7 +12,6 @@ let {
   CreateFailRes,
 } = require("../utils/responseHandler");
 
-/* GET users listing. */
 router.get("/", async function (req, res, next) {
   let products = await productController.GetAllProducts();
   CreateSuccessRes(res, products, 200);

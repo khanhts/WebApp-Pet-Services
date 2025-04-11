@@ -24,7 +24,6 @@ router.get("/:id", check_authentication, async (req, res) => {
   }
 });
 
-// Create a new invoice
 router.post("/", check_authentication, async (req, res) => {
   try {
     const invoiceData = req.body;

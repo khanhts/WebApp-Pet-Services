@@ -7,7 +7,6 @@ let {
   check_authorization,
 } = require("../utils/check_auth");
 
-// Get all services
 router.get("/", check_authentication, async (req, res) => {
   try {
     const services = await serviceController.GetAllServices();
@@ -17,7 +16,6 @@ router.get("/", check_authentication, async (req, res) => {
   }
 });
 
-// Get a single service by ID
 router.get("/:id", check_authentication, async (req, res) => {
   try {
     const service = await serviceController.GetServiceById(req.params.id);
@@ -27,7 +25,6 @@ router.get("/:id", check_authentication, async (req, res) => {
   }
 });
 
-// Create a new service
 router.post(
   "/",
   check_authentication,
@@ -42,7 +39,6 @@ router.post(
   }
 );
 
-// Update an existing service
 router.put(
   "/:id",
   check_authentication,
@@ -60,7 +56,6 @@ router.put(
   }
 );
 
-// Soft delete a service
 router.delete(
   "/:id",
   check_authentication,
