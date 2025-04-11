@@ -1,0 +1,201 @@
+doctype html
+html
+  head
+    title Create Appointment - Calendar
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/flatpickr")
+
+  body
+    header
+      h1 Appointment Calendar
+
+    // Display the calendar grid
+    .calendar-container
+      .calendar-header
+        .button-container
+            button(id="prevMonth") Previous
+        h2(id="calendarHeaderMonthYear")
+        .button-container
+            button(id="nextMonth") Next
+
+      .calendar-weekdays
+        .calendar-day-header Monday
+        .calendar-day-header Tuesday
+        .calendar-day-header Wednesday
+        .calendar-day-header Thursday
+        .calendar-day-header Friday
+        .calendar-day-header Saturday
+        .calendar-day-header Sunday
+
+      .calendar-grid
+
+    div(id="appointmentFormContainer", style='display: none;')  
+      form(id="appointmentForm" ,action='/appointments/create', method='POST')
+        label(for='checkupDate') Date
+        input(type='datetime-local', name='checkupDate', id='checkupDate' required readonly)
+
+        label(for='vet') Vet
+        select(name='vet', id='vet')
+          option(value='') Select Vet
+
+        label(for='petInfo') Pet Info
+        input(type='text', name='petInfo', id='petInfo')
+
+        label(for='description') Description
+        textarea(name='description', id='description')
+
+        button(type='submit') Create Appointment
+
+    script.
+      $(document).ready(function() {
+        var currentMonth = new Date().getMonth();  // Start with the current month
+        var currentYear = new Date().getFullYear();  // Start with the current year
+        var currentDate = new Date();  // Get the current date
+        var maxFutureMonth = new Date(currentYear, currentMonth + 12, 1);  // Maximum future month (current month + 5 months)
+        var minPastMonth = new Date(currentYear, currentMonth, 1);  // Minimum past month (current month)
+        // Update the calendar header when rendering
+        function updateCalendarHeader() {
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            $('#calendarHeaderMonthYear').text(months[currentMonth] + ' ' + currentYear);  // Update the month and year in the header
+        }
+        function isMonthInRange(month, year) {
+            var targetDate = new Date(year, month, 1);
+            return targetDate >= minPastMonth && targetDate <= maxFutureMonth;
+        }
+        function updateNavigationButtons() {
+            // If we're at the minimum month (current month), hide the "Previous" button
+            if (currentMonth === minPastMonth.getMonth() && currentYear === minPastMonth.getFullYear()) {
+                $("#prevMonth").hide();
+            } else {
+                $("#prevMonth").show();
+            }
+
+            // If we're at the maximum future month, hide the "Next" button
+            if (currentMonth === maxFutureMonth.getMonth() && currentYear === maxFutureMonth.getFullYear()) {
+                $("#nextMonth").hide();
+            } else {
+                $("#nextMonth").show();
+            }
+        }
+        // Calendar navigation (Next/Previous Month)
+        $("#prevMonth").click(function() {
+            if (isMonthInRange(currentMonth - 1, currentYear)) {
+                changeMonth(-1);  // Go to the previous month
+            }
+        });
+        $("#nextMonth").click(function() {
+            if (isMonthInRange(currentMonth + 1, currentYear)) {
+                changeMonth(1);  // Go to the next month
+            }
+        });
+        // Weekday names starting from Monday
+        var weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        function generateCalendar() {
+          // Logic to generate the calendar for the current month
+          var firstDay = new Date(currentYear, currentMonth, 1).getDay();
+          var daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+          var calendarDays = [];
+          var row = [];
+
+          // Adjust to start from Monday
+          if (firstDay === 0) firstDay = 7;
+
+          // Fill empty cells for the first row (before the 1st day of the month)
+            for (var i = 0; i < firstDay - 1; i++) {
+                row.push(null);
+            }
+
+          // Fill the calendar with the correct days of the month
+            for (var day = 1; day <= daysInMonth; day++) {
+                row.push(day);
+                if (row.length === 7 || day === daysInMonth) {
+                calendarDays.push(row);
+                row = [];
+                }
+            }
+
+            // Update the calendar view
+            $('.calendar-grid').html('');
+            calendarDays.forEach(function(row) {
+                var rowHtml = '<div class="calendar-row">';
+                row.forEach(function(day) {
+                if (day) {
+                    var dayDate = new Date(currentYear, currentMonth, day);
+                    if (isPastDay(dayDate)) {
+                        rowHtml += `<div class="calendar-day disabled" data-day="${day}">${day}</div>`;
+                    } else {
+                        rowHtml += `<div class="calendar-day" data-day="${day}">${day}</div>`;
+                    }
+                } else {
+                    rowHtml += '<div class="calendar-day empty"></div>';
+                }
+                });
+                rowHtml += '</div>';
+                $('.calendar-grid').append(rowHtml);
+            });
+
+            $(".calendar-day").click(function() {
+                var selectedDate = $(this).data("day");
+                if (selectedDate && !$(this).hasClass("disabled")) {
+                var dateString = formatDateForInput(selectedDate);
+                $("#checkupDate").val(dateString); 
+                // Show the appointment form
+                $("#appointmentFormContainer").show();
+                $('html, body').animate({
+                    scrollTop: $("#appointmentFormContainer").offset().top
+                }, 500);  // Scroll with a smooth animation in 500ms
+                }
+            });
+
+            updateCalendarHeader();
+
+            updateNavigationButtons();
+        }
+
+        generateCalendar();
+
+        function changeMonth(delta) {
+          currentMonth += delta;
+          if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+          } else if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+          }
+          generateCalendar();
+        }
+
+        // Handle calendar day click
+
+        function formatDateForInput(day) {
+            var date = new Date(currentYear, currentMonth, day);
+            var year = date.getFullYear();
+            var month = (date.getMonth() + 1).toString().padStart(2, '0');
+            var dayOfMonth = day.toString().padStart(2, '0');
+            var hours = '00'; // Set hours to 00 (or adjust based on your needs)
+            var minutes = '00'; // Set minutes to 00 (or adjust based on your needs)
+            return `${year}-${month}-${dayOfMonth}T${hours}:${minutes}`;
+        }
+
+        function isPastDay(date) {
+            // Compare only the date (ignoring the time) to see if it's before today
+            var today = new Date();
+            today.setHours(0, 0, 0, 0); // Set today's time to 00:00:00
+            date.setHours(0, 0, 0, 0); // Set the selected date's time to 00:00:00
+            return date < today;
+        }
+
+        fetch('/users/vets')
+          .then(response => response.json()).then(data => {
+            const vets = data.data;
+            console.log(vets);
+            const vetSelect = document.getElementById('vet');
+            vets.forEach(vet => {
+              vetSelect.innerHTML += `<option value="${vet._id}">${vet.username}</option>`;
+            });
+          })
+          .catch(error => console.error('Error fetching vets:', error));
+      });
