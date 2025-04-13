@@ -1,0 +1,45 @@
+.services-manage-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.services-manage-page h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.service-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.service-form input,
+.service-form textarea,
+.service-form button {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.service-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.service-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    width: 300px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.service-card button {
+    margin: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
