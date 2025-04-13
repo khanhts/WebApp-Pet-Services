@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const Appointment = require('./models/Appointment');
+const appointments = require('./routes/appointments');
 require('dotenv').config();
 
 const app = express();
@@ -11,6 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/api/appointments', appointments);
 app.use(express.static(path.join(__dirname, 'public'))); // Chứa HTML, CSS, JS
 
 // ✅ Kết nối MongoDB (Xử lý lỗi tốt hơn)
