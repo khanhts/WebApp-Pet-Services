@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // Chứa HTML, CSS, JS
 // ✅ Kết nối MongoDB (Xử lý lỗi tốt hơn)
 async function connectDB() {
   try {
-    await mongoose.connect(process.env.MONGO_URI || "mongodb://0.0.0.0:27017/PetClinic", {
+    await mongoose.connect(process.env.MONGO_URI || "mongodb://0.0.0.0:27017/donkham", {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -30,7 +30,6 @@ connectDB();
 
 // 📌 API cho FullCalendar
 app.use('/appointments', require('./routes/appointments'));
-
 
 // 📌 Xử lý lỗi chung
 app.use((err, req, res, next) => {

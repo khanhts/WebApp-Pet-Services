@@ -1,18 +1,64 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const router = express.Router();
-const Appointment = require('../models/Appointment');
+const mongoose = require('mongoose');
+const Appointment = require('../schemas/Appointment');
 
-// ✅ API lấy danh sách lịch hẹn
+// Endpoint: Lấy danh sách các đơn hẹn khám
 router.get('/', async (req, res) => {
-    try {
-        const appointments = await Appointment.find();
-        res.json(appointments);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+  try {
+    const appointments = await Appointment.find();
+    res.json(appointments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
+// Endpoint: Lấy chi tiết đơn hẹn khám theo id
+router.get('/my/:id', getAppointment, (req, res) => {
+  res.json(res.appointment);
+});
+
+// Endpoint: Tạo đơn hẹn khám mới
+router.post('/', async (req, res) => {
+  const { code, registerDate, status } = req.body;
+  const appointment = new Appointment({
+    code,
+    registerDate,
+    status,
+  });
+  try {
+    const newAppointment = await appointment.save();
+    res.status(201).json(newAppointment);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// Endpoint: Hủy đơn hẹn khám (thay đổi trạng thái sang "Đã hủy")
+router.delete('/:id/cancel', getAppointment, async (req, res) => {
+  try {
+    res.appointment.status = 'Đã hủy';
+    await res.appointment.save();
+    res.json({ message: 'Đơn hủy thành công' });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// Middleware: Tìm đơn hẹn khám theo id
+async function getAppointment(req, res, next) {
+  let appointment;
+  try {
+    appointment = await Appointment.findById(req.params.id);
+    if (appointment == null) {
+      return res.status(404).json({ message: 'Không tìm thấy đơn hẹn khám' });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+  res.appointment = appointment;
+  next();
+}
 // ✅ Thêm lịch hẹn mới
 router.post('/add', async (req, res) => {
     try {
@@ -42,7 +88,7 @@ router.post('/add', async (req, res) => {
         });
 
         if (existingAppointment) {
-            return res.status(400).json({ message: `❌ Khung giờ ${selectedHour} đã được đặt, vui lòng chọn giờ khác!` });
+            return res.status(400).json({ message: ❌ Khung giờ ${selectedHour} đã được đặt, vui lòng chọn giờ khác! });
         }
 
         const newAppointment = new Appointment({ pet, ownerName, phone, email, appointmentDate, reason });
@@ -54,8 +100,6 @@ router.post('/add', async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
-
-
 // ✅ API lấy danh sách giờ đã đặt trong ngày
 router.get('/booked-hours', async (req, res) => {
     try {
@@ -79,8 +123,6 @@ router.get('/booked-hours', async (req, res) => {
         res.status(500).json({ message: "Lỗi khi lấy danh sách giờ đặt!", error });
     }
 });
-
-
 // ✅ API lấy danh sách ngày đã đủ 5 lịch hẹn
 router.get('/disabled-dates', async (req, res) => {
     try {
@@ -100,9 +142,6 @@ router.get('/disabled-dates', async (req, res) => {
         res.status(500).json({ message: "Lỗi khi lấy danh sách ngày đã đủ lịch!", error });
     }
 });
-
-
-
 
 // ✅ API lấy thông tin lịch hẹn theo ID
 router.get('/:id', async (req, res) => {
@@ -138,10 +177,6 @@ router.get('/success/:id', async (req, res) => {
       res.status(500).json({ message: "Lỗi server!", error: error.message });
   }
 });
-
-
-
-
 // ✅ Xóa lịch hẹn
 router.delete('/delete/:id', async (req, res) => {
     try {
@@ -152,5 +187,5 @@ router.delete('/delete/:id', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+module.exports = router;
 
-module.exports = router
