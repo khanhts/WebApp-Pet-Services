@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Lịch Hẹn</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>➕ Đặt Lịch Hẹn</h2>
+        <form id="appointmentForm">
+            <label for="pet">🐾 Tên Thú Cưng:</label>
+            <input type="text" id="pet" name="pet" required>
+
+            <label for="ownerName">👤 Tên Chủ:</label>
+            <input type="text" id="ownerName" name="ownerName" required>
+
+            <label for="phone">📞 Số Điện Thoại:</label>
+            <input type="text" id="phone" name="phone" required>
+
+            <label for="email">📧 Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="appointmentDate">📅 Ngày Hẹn:</label>
+            <input type="date" id="appointmentDate" name="appointmentDate" required>
+
+            <label for="reason">📝 Lý Do:</label>
+            <textarea id="reason" name="reason" required></textarea>
+
+            <button type="submit">✅ Đặt Lịch</button>
+        </form>
+    </div>
+
+    <script src="./js/add-form.js"></script>
+</body>
+</html>

@@ -21,6 +21,15 @@ app.set('view engine', 'pug');
 
 const cors = require('cors');
 
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
+const Appointment = require('./models/Appointment');
+const appointments = require('./routes/appointments');
+require('dotenv').config();
+
+const app = express();
+
 app.use(cors({
   origin: 'http://127.0.0.1:5500', // địa chỉ frontend
   credentials: true
@@ -50,20 +59,20 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-
 // ✅ Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/api/appointments', appointments);
 
 app.use(express.static(path.join(__dirname, 'public'))); // Chứa HTML, CSS, JS
 
 // ✅ Kết nối MongoDB (Xử lý lỗi tốt hơn)
 async function connectDB() {
   try {
-    await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/login", {
 
+    await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/login", {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -75,6 +84,10 @@ async function connectDB() {
 }
 connectDB();
 
+
+// 📌 API cho FullCalendar
+app.use('/appointments', require('./routes/appointments'));
+
 // 📌 Xử lý lỗi chung
 app.use((err, req, res, next) => {
   console.error("❌ Lỗi server:", err);
@@ -82,7 +95,8 @@ app.use((err, req, res, next) => {
 });
 
 // 🚀 Khởi động server
-const PORT = process.env.PORT || 3100;
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server chạy tại: http://localhost:${PORT}`);
 });

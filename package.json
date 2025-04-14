@@ -1,23 +1,28 @@
 {
-  "name": "myapp",
-  "version": "0.0.0",
-  "private": true,
+
+  "name": "pet-appointment",
+  "version": "1.0.0",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
-    "bcrypt": "^5.1.1",
-    "cookie-parser": "~1.4.4",
+    "body-parser": "^2.2.0",
     "cors": "^2.8.5",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "express-validator": "^7.2.1",
-    "http-errors": "~1.6.3",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.12.1",
-    "morgan": "~1.9.1",
-    "nodemailer": "^6.10.0",
-    "nodemon": "^3.1.9",
-    "pug": "2.0.0-beta11"
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "fullcalendar": "^6.1.15",
+    "mongoose": "^8.13.0"
+  },
+  "devDependencies": {
+    "cypress": "^14.2.1",
+    "nodemon": "^3.1.9"
   }
-} 
+}
+
