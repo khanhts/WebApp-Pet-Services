@@ -25,7 +25,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const Appointment = require('./models/Appointment');
+
 const appointments = require('./routes/appointments');
+
 require('dotenv').config();
 
 const app = express();
@@ -73,6 +75,7 @@ async function connectDB() {
   try {
 
     await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/login", {
+
       useNewUrlParser: true,
       useUnifiedTopology: true
     });

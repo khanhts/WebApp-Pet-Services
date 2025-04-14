@@ -3,6 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Hẹn</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+
+    
+    <!-- ✅ FullCalendar CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
+    
+
+    <!-- ✅ Thư viện moment.js (để xử lý thời gian) -->
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <h2>📅 Lịch Hẹn</h2>
+
+        <a href="/add-form.html" class="btn">➕ Đặt Lịch Hẹn</a>
+        <a href="/appointments-list.html" class="btn">Danh sách lịch hẹn</a>
+        <div id="calendar"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="/js/script.js"></script>
+
+        <a href="./add-form.html" class="btn">➕ Đặt Lịch Hẹn</a>
+        <div id="calendar"></div>
 
     <title>Đăng Ký / Đăng Nhập</title>
     <style>
@@ -114,6 +142,7 @@
             <a onclick="toggleForm()" id="toggle-link">Đăng ký</a>
             <a href="forgot-password.html" id="forgot-password" class="hidden">Quên mật khẩu?</a>
         </div>
+
     </div>
 
     <script>
