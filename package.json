@@ -1,5 +1,6 @@
 {
 
+
   "name": "webapp-pet-services",
   "version": "1.0.0",
   "description": "A web application where a user can make an appointment to visit a vet or buy pet's products",
@@ -10,6 +11,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC"
+
 
   "name": "pet-appointment",
   "version": "1.0.0",
@@ -37,3 +39,4 @@
   }
 
 }
+

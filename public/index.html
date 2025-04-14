@@ -31,10 +31,166 @@
 
         <a href="./add-form.html" class="btn">➕ Đặt Lịch Hẹn</a>
         <div id="calendar"></div>
+
+    <title>Đăng Ký / Đăng Nhập</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f5f5f7;
+            margin: 0;
+            overflow: hidden;
+            transition: background 0.5s ease;
+        }
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        h2 {
+            color: #1d1d1f;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 14px;
+            margin: 10px 0;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            outline: none;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f5f5f7;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #0071e3;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 113, 227, 0.3);
+            transform: scale(1.02);
+        }
+        button {
+            width: calc(100% - 10px);
+            padding: 14px;
+            background: #0071e3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #005bb5;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 113, 227, 0.3);
+        }
+        .form-footer {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #6e6e73;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .form-footer a {
+            color: #0071e3;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .form-footer a:hover {
+            color: #005bb5;
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2 id="form-title">Đăng Ký Tài Khoản</h2>
+        <input type="text" id="username" placeholder="Tên đăng nhập" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="text" id="phone" placeholder="Số điện thoại" required>
+        <input type="text" id="address" placeholder="Địa chỉ" required>
+        <input type="password" id="password" placeholder="Mật khẩu" required>
+        <button onclick="submitForm()" id="submit-btn">Đăng Ký</button>
+        <div class="form-footer" id="footer-section">
+            <a onclick="toggleForm()" id="toggle-link">Đăng ký</a>
+            <a href="forgot-password.html" id="forgot-password" class="hidden">Quên mật khẩu?</a>
+        </div>
+
     </div>
 
-    <!-- ✅ FullCalendar JS -->
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-    <script src="./js/calendar.js"></script>
-</body>
+    <script>
+        let isRegistering = true;
+
+        function toggleForm() {
+            isRegistering = !isRegistering;
+            document.getElementById("form-title").innerText = isRegistering ? "Đăng Ký Tài Khoản" : "Đăng Nhập";
+            document.getElementById("submit-btn").innerText = isRegistering ? "Đăng Ký" : "Đăng Nhập";
+            document.getElementById("username").classList.toggle("hidden", !isRegistering);
+            document.getElementById("phone").classList.toggle("hidden", !isRegistering);
+            document.getElementById("address").classList.toggle("hidden", !isRegistering);
+            document.getElementById("toggle-link").innerText = isRegistering ? "Đăng nhập" : "Đăng ký";
+            document.getElementById("forgot-password").classList.toggle("hidden", isRegistering);
+        }
+
+        function submitForm() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            if (!email || !password) {
+                alert("Vui lòng điền đầy đủ thông tin!");
+                return;
+            }
+            const url = isRegistering ? "http://localhost:3000/auth/signup" : "http://localhost:3000/auth/login";
+            
+            let data = { email, password };
+            if (isRegistering) {
+                data.username = document.getElementById("username").value;
+                data.phone = document.getElementById("phone").value;
+                data.address = document.getElementById("address").value;
+            }
+
+            fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success)
+                    alert("Đăng nhập thành công! ")
+                else
+                alert("Đăng nhập thất bại! ")
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+  
+</head>
 </html>
+
